@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaSbtSettings">
+    <option name="customVMEnabled" value="true" />
+    <option name="customVMPath" value="D:/Program Files/Java/jdk1.8.0_241" />
+    <option name="vmParameters" value="-Dsbt.log.format=true -Dsbt.boot.directory=D:/tools/sbt/boot -Dsbt.ivy.home=D:/tools/sbt/ivy2 -Dsbt.repository.config=D:/tools/sbt/conf/repo.properties -Dsbt.override.build.repos=true -Dsbt.global.base=D:/tools/sbt/.sbt" />
+  </component>
+</project>
