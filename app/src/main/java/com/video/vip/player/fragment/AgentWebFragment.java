@@ -31,6 +31,8 @@ import com.google.gson.Gson;
 import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.*;
 import com.video.vip.player.R;
+import com.video.vip.player.activity.AppSettingActivity;
+import com.video.vip.player.activity.CommonActivity;
 import com.video.vip.player.app.App;
 import com.video.vip.player.client.MiddlewareChromeClient;
 import com.video.vip.player.client.MiddlewareWebViewClient;
@@ -517,11 +519,9 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 //                    }
 
                     return true;
-                case R.id.vip_jx:
-                    String url = mAgentWeb.getWebCreator().getWebView().getUrl();
-                    System.out.println(url);
-                    Log.i("vip",url);
-
+                case R.id.app_setting:
+                    Intent intent = new Intent(App.mContext, AppSettingActivity.class);
+                    startActivity(intent);
                     return true;
                 default:
                     return false;

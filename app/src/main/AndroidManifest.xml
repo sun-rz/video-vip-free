@@ -75,6 +75,9 @@
                         android:scheme="agentweb" />
             </intent-filter>
         </activity>
+
+        <activity
+                android:name="com.video.vip.player.activity.AppSettingActivity" />
     </application>
 
 </manifest>
