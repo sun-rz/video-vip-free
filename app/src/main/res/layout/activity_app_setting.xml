@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:titleTextColor="@android:color/white"
+            app:theme="@style/toolBar"
+            app:titleTextColor="@android:color/white">
+
+
+        <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:singleLine="true"
+                android:text="设置"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"/>
+    </androidx.appcompat.widget.Toolbar>
+    <TableLayout android:padding="3dip"
+                 android:id="@+id/tableLayout1"
+                 android:layout_width="fill_parent"
+                 android:stretchColumns="1"
+                 android:layout_height="fill_parent">
+
+        <TableRow>
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"
+                      android:gravity="center"
+                      android:textStyle="bold"
+                      android:padding="3dip"
+                      android:text="默认接口" tools:ignore="RtlHardcoded">
+            </TextView>
+            <Spinner
+                    android:id="@+id/spinner1"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </TableRow>
+        <TableRow>
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"
+                      android:gravity="center"
+                      android:textStyle="bold"
+                      android:padding="3dip"
+                      android:text="配置" tools:ignore="RtlHardcoded">
+            </TextView>
+            <EditText android:id="@+id/third_api"
+                      android:enabled="true"
+                      android:gravity="top"
+                      android:minLines="10"
+                      android:maxLines="10"
+                      android:scrollbars="vertical"
+                      android:background="@drawable/text_area"
+            ></EditText>
+        </TableRow>
+
+        <TableRow>
+            <Button android:layout_column="1"
+                    android:id="@+id/button_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="保存"/>
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
