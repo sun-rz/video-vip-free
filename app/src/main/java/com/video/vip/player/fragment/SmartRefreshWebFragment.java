@@ -40,8 +40,19 @@ public class SmartRefreshWebFragment extends BounceWebFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ImageView mSearchImageView = view.findViewById(R.id.iv_search);
+        ImageView mJxImageView = view.findViewById(R.id.iv_jx);
+        Bundle bundle = this.getArguments();
         if (null != mSearchImageView) {
-            mSearchImageView.setVisibility(View.GONE);
+            boolean aBoolean = bundle.getBoolean(SHOW_SEARCH_KEY);
+            if (!aBoolean) {
+                mSearchImageView.setVisibility(View.GONE);
+            }
+        }
+        if (null != mJxImageView) {
+            boolean aBoolean = bundle.getBoolean(SHOW_PLAYER_KEY);
+            if (!aBoolean) {
+                mJxImageView.setVisibility(View.GONE);
+            }
         }
         super.onViewCreated(view, savedInstanceState);
 

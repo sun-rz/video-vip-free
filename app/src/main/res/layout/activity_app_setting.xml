@@ -21,55 +21,43 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:singleLine="true"
-                android:text="设置"
+                android:text="@string/setting"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"/>
     </androidx.appcompat.widget.Toolbar>
-    <TableLayout android:padding="3dip"
+    <TableLayout android:padding="10dip"
                  android:id="@+id/tableLayout1"
                  android:layout_width="fill_parent"
                  android:stretchColumns="1"
                  android:layout_height="fill_parent">
-
         <TableRow>
             <TextView android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
                       android:gravity="center"
-                      android:textStyle="bold"
-                      android:padding="3dip"
-                      android:text="默认接口" tools:ignore="RtlHardcoded">
+                      android:text="" tools:ignore="RtlHardcoded">
             </TextView>
-            <Spinner
-                    android:id="@+id/spinner1"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-        </TableRow>
-        <TableRow>
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:gravity="center"
-                      android:textStyle="bold"
-                      android:padding="3dip"
-                      android:text="配置" tools:ignore="RtlHardcoded">
-            </TextView>
-            <EditText android:id="@+id/third_api"
-                      android:enabled="true"
-                      android:gravity="top"
-                      android:minLines="10"
-                      android:maxLines="10"
-                      android:scrollbars="vertical"
-                      android:background="@drawable/text_area"
-            ></EditText>
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/third_api"
+                    android:enabled="true"
+                    android:gravity="top"
+                    android:hint="@string/api_config"
+                    android:minLines="25"
+                    android:maxLines="25"
+                    android:scrollbars="vertical"
+                    android:background="@drawable/text_area"/>
         </TableRow>
 
         <TableRow>
             <Button android:layout_column="1"
-                    android:id="@+id/button_1"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/save"
+                    android:textSize="14sp"
+                    android:id="@+id/callJsNoParamsButton"
+                    android:background="@drawable/selector_drawable_for_btn"
+                    android:textAllCaps="false"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="保存"/>
+                    android:layout_height="wrap_content"/>
         </TableRow>
     </TableLayout>
 

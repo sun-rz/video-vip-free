@@ -32,7 +32,7 @@ import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.*;
 import com.video.vip.player.R;
 import com.video.vip.player.activity.AppSettingActivity;
-import com.video.vip.player.activity.CommonActivity;
+import com.video.vip.player.activity.VideoPlayerActivity;
 import com.video.vip.player.app.App;
 import com.video.vip.player.client.MiddlewareChromeClient;
 import com.video.vip.player.client.MiddlewareWebViewClient;
@@ -60,7 +60,14 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     private ImageView mFinishImageView;
     private TextView mTitleTextView;
     protected AgentWeb mAgentWeb;
+
     public static final String URL_KEY = "url_key";
+    public static final String SHOW_SEARCH_KEY = "show_search";
+    public static final String SHOW_PLAYER_KEY = "show_player";
+    public static final String WEB_URL_KEY = "web_url";
+    public static final String WEB_TITLE_KEY = "web_title";
+
+    private String webTitle = null;
     private ImageView mMoreImageView;
     private PopupMenu mPopupMenu;
     /**
@@ -91,6 +98,21 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        ImageView mSearchImageView = view.findViewById(R.id.iv_search);
+        ImageView mJxImageView = view.findViewById(R.id.iv_jx);
+        Bundle bundle = this.getArguments();
+        if (null != mSearchImageView) {
+            boolean aBoolean = bundle.getBoolean(SHOW_SEARCH_KEY);
+            if (!aBoolean) {
+                mSearchImageView.setVisibility(View.GONE);
+            }
+        }
+        if (null != mJxImageView) {
+            boolean aBoolean = bundle.getBoolean(SHOW_PLAYER_KEY);
+            if (!aBoolean) {
+                mJxImageView.setVisibility(View.GONE);
+            }
+        }
         super.onViewCreated(view, savedInstanceState);
 
 
@@ -136,6 +158,13 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 //				};
 //			}
 //		});
+        Bundle arguments = getArguments();
+        String web_url = arguments.getString(AgentWebFragment.WEB_URL_KEY);
+        String web_title = arguments.getString(AgentWebFragment.WEB_TITLE_KEY);
+        mTitleTextView = view.findViewById(R.id.toolbar_title);
+        if (null != mTitleTextView) {
+            mTitleTextView.setText(web_title);
+        }
     }
 
 
@@ -252,6 +281,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                     title = title.substring(0, 10).concat("...");
                 }
             }
+            webTitle = title;
             mTitleTextView.setText(title);
         }
     };
@@ -360,15 +390,18 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 
     private SimpleSearchView mSimpleSearchView;
     private ImageView mSearchImageView;
+    private ImageView mJxImageView;
 
     protected void initView(View view) {
-        mBackImageView = (ImageView) view.findViewById(R.id.iv_back);
+        mBackImageView = view.findViewById(R.id.iv_back);
         mLineView = view.findViewById(R.id.view_line);
-        mFinishImageView = (ImageView) view.findViewById(R.id.iv_finish);
-        mTitleTextView = (TextView) view.findViewById(R.id.toolbar_title);
+        mFinishImageView = view.findViewById(R.id.iv_finish);
+        mTitleTextView = view.findViewById(R.id.toolbar_title);
         mBackImageView.setOnClickListener(mOnClickListener);
         mFinishImageView.setOnClickListener(mOnClickListener);
-        mMoreImageView = (ImageView) view.findViewById(R.id.iv_more);
+        mJxImageView = view.findViewById(R.id.iv_jx);
+        mJxImageView.setOnClickListener(mOnClickListener);
+        mMoreImageView = view.findViewById(R.id.iv_more);
         mMoreImageView.setOnClickListener(mOnClickListener);
         mSearchImageView = view.findViewById(R.id.iv_search);
         mSearchImageView.setOnClickListener(mOnClickListener);
@@ -419,8 +452,6 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-
             switch (v.getId()) {
                 case R.id.iv_back:
                     // true表示AgentWeb处理了该事件
@@ -436,6 +467,12 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                     break;
                 case R.id.iv_search:
                     mSimpleSearchView.showSearch();
+                    break;
+                case R.id.iv_jx:
+                    Intent intent = new Intent(App.mContext, VideoPlayerActivity.class);
+                    intent.putExtra(WEB_URL_KEY, mAgentWeb.getWebCreator().getWebView().getUrl());
+                    intent.putExtra(WEB_TITLE_KEY, webTitle);
+                    startActivity(intent);
                     break;
                 default:
                     break;
