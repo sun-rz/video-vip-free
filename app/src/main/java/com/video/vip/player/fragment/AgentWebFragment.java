@@ -276,11 +276,11 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
         @Override
         public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
-            if (mTitleTextView != null && !TextUtils.isEmpty(title)) {
+            /*if (mTitleTextView != null && !TextUtils.isEmpty(title)) {
                 if (title.length() > 10) {
                     title = title.substring(0, 10).concat("...");
                 }
-            }
+            }*/
             webTitle = title;
             mTitleTextView.setText(title);
         }
@@ -393,11 +393,11 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     private ImageView mJxImageView;
 
     protected void initView(View view) {
-        mBackImageView = view.findViewById(R.id.iv_back);
-        mLineView = view.findViewById(R.id.view_line);
+        //mBackImageView = view.findViewById(R.id.iv_back);
+        //mLineView = view.findViewById(R.id.view_line);
         mFinishImageView = view.findViewById(R.id.iv_finish);
         mTitleTextView = view.findViewById(R.id.toolbar_title);
-        mBackImageView.setOnClickListener(mOnClickListener);
+        //mBackImageView.setOnClickListener(mOnClickListener);
         mFinishImageView.setOnClickListener(mOnClickListener);
         mJxImageView = view.findViewById(R.id.iv_jx);
         mJxImageView.setOnClickListener(mOnClickListener);
@@ -445,20 +445,20 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 
     private void pageNavigator(int tag) {
 
-        mBackImageView.setVisibility(tag);
-        mLineView.setVisibility(tag);
+        //mBackImageView.setVisibility(tag);
+        //mLineView.setVisibility(tag);
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.iv_back:
+            /*    case R.id.iv_back:
                     // true表示AgentWeb处理了该事件
                     if (!mAgentWeb.back()) {
                         AgentWebFragment.this.getActivity().finish();
                     }
-                    break;
+                    break;*/
                 case R.id.iv_finish:
                     AgentWebFragment.this.getActivity().finish();
                     break;

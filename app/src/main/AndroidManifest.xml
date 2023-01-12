@@ -79,7 +79,10 @@
         <activity
                 android:name="com.video.vip.player.activity.AppSettingActivity"/>
         <activity
-                android:name="com.video.vip.player.activity.VideoPlayerActivity" />
+                android:name="com.video.vip.player.activity.VideoPlayerActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:screenOrientation="sensor"
+        />
     </application>
 
 </manifest>

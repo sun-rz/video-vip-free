@@ -57,11 +57,11 @@ public class EasyWebFragment extends BaseAgentWebFragment {
     }
 
     protected void initView(View view) {
-        mBackImageView = (ImageView) view.findViewById(R.id.iv_back);
-        mLineView = view.findViewById(R.id.view_line);
+        //mBackImageView = (ImageView) view.findViewById(R.id.iv_back);
+        //mLineView = view.findViewById(R.id.view_line);
         mFinishImageView = (ImageView) view.findViewById(R.id.iv_finish);
         mTitleTextView = (TextView) view.findViewById(R.id.toolbar_title);
-        mBackImageView.setOnClickListener(mOnClickListener);
+        //mBackImageView.setOnClickListener(mOnClickListener);
         mFinishImageView.setOnClickListener(mOnClickListener);
         mMoreImageView = (ImageView) view.findViewById(R.id.iv_more);
         mMoreImageView.setVisibility(View.GONE);
@@ -80,11 +80,11 @@ public class EasyWebFragment extends BaseAgentWebFragment {
 
 
             switch (v.getId()) {
-                case R.id.iv_back:
+            /*    case R.id.iv_back:
                     if (!mAgentWeb.back()) {
                         EasyWebFragment.this.getActivity().finish();
                     }
-                    break;
+                    break;*/
                 case R.id.iv_finish:
                     EasyWebFragment.this.getActivity().finish();
                     break;
