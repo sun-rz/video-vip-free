@@ -25,30 +25,42 @@
                 android:textColor="@android:color/white"
                 android:textSize="14sp"/>
     </androidx.appcompat.widget.Toolbar>
-    <TableLayout android:padding="10dip"
+    <TableLayout android:layout_margin="10dip"
                  android:id="@+id/tableLayout1"
                  android:layout_width="fill_parent"
                  android:stretchColumns="1"
                  android:layout_height="fill_parent">
         <TableRow>
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:gravity="center"
-                      android:text="" tools:ignore="RtlHardcoded">
-            </TextView>
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/third_api"
                     android:enabled="true"
                     android:gravity="top"
                     android:hint="@string/api_config"
-                    android:minLines="25"
-                    android:maxLines="25"
+                    android:layout_width="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="22"
+                    android:layout_column="0"
+                    android:layout_span="2"
+                    android:singleLine="false"
                     android:scrollbars="vertical"
                     android:background="@drawable/text_area"/>
         </TableRow>
-
+        <TableRow android:paddingTop="15dp">
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"
+                      android:gravity="center"
+                      android:text="@string/default_api_text" tools:ignore="RtlHardcoded">
+            </TextView>
+            <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/text_area"/>
+        </TableRow>
         <TableRow>
-            <Button android:layout_column="1"
+            <Button android:layout_column="0"
+                    android:layout_span="2"
                     android:textColor="@color/white"
                     android:layout_marginTop="30dp"
                     android:text="@string/save"

@@ -6,4 +6,5 @@
     <string name="api_config">请输入接口配置信息</string>
     <string name="jk">接口：</string>
     <string name="video_play">视频播放</string>
+    <string name="default_api_text">默认接口：</string>
 </resources>
