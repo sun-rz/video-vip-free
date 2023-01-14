@@ -44,6 +44,7 @@
                     android:layout_span="2"
                     android:singleLine="false"
                     android:scrollbars="vertical"
+                    android:layout_weight="1"
                     android:background="@drawable/text_area"/>
         </TableRow>
         <TableRow android:paddingTop="15dp">
@@ -54,9 +55,8 @@
             </TextView>
             <Spinner
                     android:id="@+id/spinner"
-                    android:layout_width="fill_parent"
-                    android:ellipsize ="end"
-                    android:singleLine="true"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:background="@drawable/text_area"/>
         </TableRow>
@@ -70,7 +70,8 @@
                     android:id="@+id/btn_save"
                     android:background="@drawable/selector_drawable_for_btn"
                     android:textAllCaps="false"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"/>
         </TableRow>
     </TableLayout>
