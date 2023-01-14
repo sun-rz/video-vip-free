@@ -1,5 +1,6 @@
 package com.video.vip.player.activity;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -10,14 +11,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.video.vip.player.R;
 import com.video.vip.player.fragment.*;
+import com.video.vip.player.utils.StringUitls;
 
 import static com.video.vip.player.activity.MainActivity.*;
 
 public class VideoPlayerActivity extends AppCompatActivity {
     private FrameLayout mFrameLayout;
-    public static final String TYPE_KEY = "type_key";
     private FragmentManager mFragmentManager;
     private AgentWebFragment mAgentWebFragment;
+    public static String default_api;
 
     public VideoPlayerActivity() {
     }
@@ -27,6 +29,11 @@ public class VideoPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_common);
+
+        if(StringUitls.isBlank(default_api)) {
+            SharedPreferences sharedPreferences = getSharedPreferences(AppSettingActivity.APP_CONFIG_FILE_KEY, MODE_PRIVATE);
+            default_api = sharedPreferences.getString(AppSettingActivity.DEFAULT_API_KEY, "https://jx.aidouer.net/?url=");
+        }
 
         mFrameLayout = this.findViewById(R.id.container_framelayout);
         mFragmentManager = this.getSupportFragmentManager();
@@ -42,7 +49,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
         if (key == FLAG_GUIDE_DICTIONARY_VIDEO_FULL_SCREEN) {
             ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
             String web_url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
-            mBundle.putString(AgentWebFragment.URL_KEY, "https://jx.aidouer.net/?url=" + web_url);
+            mBundle.putString(AgentWebFragment.URL_KEY, default_api + web_url);
             mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, false);
             mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, false);
             String web_title = getIntent().getStringExtra(AgentWebFragment.WEB_TITLE_KEY);

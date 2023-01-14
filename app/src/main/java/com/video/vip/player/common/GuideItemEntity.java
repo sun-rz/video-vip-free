@@ -26,12 +26,15 @@ public class GuideItemEntity {
 	private String guideTitle;
 	private int guideDictionary;
 	private int extra;
+	private int image;
+	private String url;
 
-	public GuideItemEntity(String guideTitle, int guideDictionary) {
+	public GuideItemEntity(String guideTitle, int guideDictionary, int image,String url) {
 		this.guideTitle = guideTitle;
 		this.guideDictionary = guideDictionary;
+		this.image = image;
+		this.url = url;
 	}
-
 
 	public String getGuideTitle() {
 		return guideTitle;
@@ -47,5 +50,21 @@ public class GuideItemEntity {
 
 	public void setGuideDictionary(int guideDictionary) {
 		this.guideDictionary = guideDictionary;
+	}
+
+	public int getImage() {
+		return image;
+	}
+
+	public void setImage(int image) {
+		this.image = image;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

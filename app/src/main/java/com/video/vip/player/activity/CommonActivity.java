@@ -33,7 +33,7 @@ public class CommonActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_common);
 
-        mFrameLayout = (FrameLayout) this.findViewById(R.id.container_framelayout);
+        mFrameLayout = this.findViewById(R.id.container_framelayout);
         int key = getIntent().getIntExtra(TYPE_KEY, -1);
         mFragmentManager = this.getSupportFragmentManager();
         openFragment(key);
@@ -49,7 +49,21 @@ public class CommonActivity extends AppCompatActivity {
 
 
         switch (key) {
-
+            /*SmartRefresh 下拉刷新*/
+            case FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH:
+                String url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
+                ft.add(R.id.container_framelayout, mAgentWebFragment = SmartRefreshWebFragment.getInstance(mBundle = new Bundle()), SmartRefreshWebFragment.class.getName());
+                mBundle.putString(AgentWebFragment.URL_KEY, url);
+                mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, false);
+                mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, true);
+                break;
+            case FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH:
+                url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
+                ft.add(R.id.container_framelayout, mAgentWebFragment = SmartRefreshWebFragment.getInstance(mBundle = new Bundle()), SmartRefreshWebFragment.class.getName());
+                mBundle.putString(AgentWebFragment.URL_KEY, url);
+                mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, true);
+                mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, false);
+                break;
             /*Fragment 使用AgenWeb*/
             case FLAG_GUIDE_DICTIONARY_USE_IN_FRAGMENT: //项目中请使用常量代替0 ， 代码可读性更高
                 ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
@@ -117,14 +131,6 @@ public class CommonActivity extends AppCompatActivity {
             case FLAG_GUIDE_DICTIONARY_JSBRIDGE_SAMPLE:
                 ft.add(R.id.container_framelayout, mAgentWebFragment = JsbridgeWebFragment.getInstance(mBundle = new Bundle()), JsbridgeWebFragment.class.getName());
                 mBundle.putString(AgentWebFragment.URL_KEY, "file:///android_asset/jsbridge/demo.html");
-                break;
-
-            /*SmartRefresh 下拉刷新*/
-            case FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH:
-                ft.add(R.id.container_framelayout, mAgentWebFragment = SmartRefreshWebFragment.getInstance(mBundle = new Bundle()), SmartRefreshWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "https://v.qq.com/");
-                mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, false);
-                mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, true);
                 break;
             /*地图*/
             case FLAG_GUIDE_DICTIONARY_MAP:

@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public class AppSettingActivity extends AppCompatActivity {
 
-    public static final String CONFIG_FILE_KEY = "config.json";
+    public final String CONFIG_FILE_KEY = "config.json";
     public static final String DEFAULT_API_KEY = "default_api";
     public static final String APP_CONFIG_FILE_KEY = "WebViewChromiumPrefs";
 
@@ -50,7 +50,7 @@ public class AppSettingActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(APP_CONFIG_FILE_KEY, MODE_PRIVATE);
         default_api = sharedPreferences.getString(DEFAULT_API_KEY, "");
 
-        final SelectItem[] defaultItem = {null};
+         final SelectItem[] defaultItem = {null};
 
         String config = getConfig();
         if (!StringUitls.isBlank(config)) {
@@ -61,8 +61,10 @@ public class AppSettingActivity extends AppCompatActivity {
             adapterArr = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectItems);
             if (!StringUitls.isBlank(default_api)) {
                 Optional<SelectItem> first = selectItems.stream().filter(selectItem -> selectItem.code.equals(default_api)).findFirst();
-                if (first.isPresent()) {
-                    defaultItem[0] = first.get();
+                first.ifPresent(selectItem -> defaultItem[0] = selectItem);
+            } else {
+                if (selectItems.size() > 0) {
+                    defaultItem[0] = selectItems.get(0);
                 }
             }
         } else {
@@ -124,6 +126,17 @@ public class AppSettingActivity extends AppCompatActivity {
                 stream.write(buffer, 0, length);
             }
             return stream.toString();
+        } catch (FileNotFoundException e) {
+            try {
+                String json="[ { \"code\": \"//pangujiexi.cc/jiexi.php?url=\", \"title\": \"视频解析地址【全网解析(广告)】\" }, { \"code\": \"//www.ckmov.vip/api.php?url=\", \"title\": \"优先VIP解析引擎系统【全网解析(广告)】\" }, { \"code\": \"//jx.xmflv.com/?url=\", \"title\": \"虾米视频解析【PC电脑解析】\" }, { \"code\": \"//jx.aidouer.net/?url=\", \"title\": \"视频云解析【全网解析】\" }, { \"code\": \"//jx.m3u8.tv/jiexi/?url=\", \"title\": \"无广告视频解析【全网解析】\" }, { \"code\": \"//z1.im1907.top/?jx=\", \"title\": \"输入片名自动解析【NEW】\" }, { \"code\": \"//svip.bljiex.cc/?v=\", \"title\": \"VIP极解析【记忆播放】\" }, { \"code\": \"//z1.m1907.cn/?jx=\", \"title\": \"测试解析【全网解析】\" }, { \"code\": \"//jiexi.8old.cn/m3u8tv20210705%60/?url=\", \"title\": \"广告超速解析【通用】\" }, { \"code\": \"//jx.m3u8.tv/jiexi/?url=\", \"title\": \"测试解析【全网解析】\" }, { \"code\": \"//www.nxflv.com/?url=\", \"title\": \"测试解析二【PC电脑解析】\" }, { \"code\": \"//www.h8jx.com/jiexi.php?url=\", \"title\": \"测试解析三【全网解析】\" }, { \"code\": \"//okjx.cc/?url=\", \"title\": \"VIP解析【PC电脑解析】\" }, { \"code\": \"//www.1717yun.com/jx/ty.php?url=\", \"title\": \"VIP解析二【PC电脑解析】\" }, { \"code\": \"//parse.123mingren.com/?url=\", \"title\": \"VIP解析三【全网解析】\" }, { \"code\": \"//www.administratorw.com/index/qqvod.php?url=\", \"title\": \"VIP解析四【全网解析】\" }, { \"code\": \"//jx.000180.top/jx/?url=\", \"title\": \"观察解析【全网解析】\" }, { \"code\": \"//jiexi44.qmbo.cn/jiexi/?url=\", \"title\": \"①vip专用解析（推荐）\" }, { \"code\": \"//okjx.cc/?url=\", \"title\": \"一号通用vip引擎系统 【稳定通用】\" }, { \"code\": \"//jx.m3u8.tv/jiexi/?url=\", \"title\": \"②通道\" }, { \"code\": \"//jx.ivito.cn/?url=\", \"title\": \"③蓝光通道\" }, { \"code\": \"//jx.ivito.cn/?url=\", \"title\": \"视频解析地址【全网解析(广告)】\" }, { \"code\": \"//www.ckmov.vip/api.php?url=\", \"title\": \"优先VIP解析引擎系统【全网解析(广告)】\" }, { \"code\": \"//jx.xmflv.com/?url=\", \"title\": \"虾米视频解析【PC电脑解析】\" }, { \"code\": \"//jx.aidouer.net/?url=\", \"title\": \"视频云解析【全网解析】\" }, { \"code\": \"//jx.m3u8.tv/jiexi/?url=\", \"title\": \"无广告视频解析【全网解析】\" }, { \"code\": \"//z1.im1907.top/?jx=\", \"title\": \"输入片名自动解析【NEW】\" }, { \"code\": \"//www.ckmov.vip/api.php?url=\", \"title\": \"无广告解析【全网解析】\" }, { \"code\": \"//pangujiexi.cc/jiexi.php?url=\", \"title\": \"盘古视频解析【PC电脑解析】\" }, { \"code\": \"//z1.m1907.cn/?jx=\", \"title\": \"测试解析【全网解析】\" }, { \"code\": \"//jiexi.8old.cn/m3u8tv20210705%60/?url=\", \"title\": \"广告超速解析【通用】\" }, { \"code\": \"//jx.m3u8.tv/jiexi/?url=\", \"title\": \"测试解析【全网解析】\" }, { \"code\": \"//www.nxflv.com/?url=\", \"title\": \"测试解析二【PC电脑解析】\" }, { \"code\": \"//55o.co/?url=\", \"title\": \"测试解析三【全网解析】\" }, { \"code\": \"//jx.ivito.cn/?url=\", \"title\": \"VIP解析【PC电脑解析】\" }, { \"code\": \"//www.1717yun.com/jx/ty.php?url=\", \"title\": \"VIP解析二【PC电脑解析】\" }, { \"code\": \"//parse.123mingren.com/?url=\", \"title\": \"VIP解析三【全网解析】\" }, { \"code\": \"//www.administratorw.com/index/qqvod.php?url=\", \"title\": \"VIP解析四【全网解析】\" }, { \"code\": \"//www.8090g.cn/?url=\", \"title\": \"观察解析【全网解析(广告)】\" }, { \"code\": \"//jx.000180.top/jx/?url=\", \"title\": \"观察解析二【全网解析】\" }, { \"code\": \"https://55o.co/?url=\", \"title\": \"视频解析地址【全网解析(弹幕)】\" }, { \"code\": \"//jx.ivito.cn/?url=\", \"title\": \"视频解析地址【全网解析(广告)】\" }, { \"code\": \"//www.ckmov.vip/api.php?url=\", \"title\": \"优先VIP解析引擎系统【全网解析(广告)】\" }, { \"code\": \"//pangujiexi.cc/jiexi.php?url=\", \"title\": \"盘古视频解析【PC电脑解析】\" }, { \"code\": \"//jx.xmflv.com/?url=\", \"title\": \"虾米视频解析【PC电脑解析】\" }, { \"code\": \"//jx.aidouer.net/?url=\", \"title\": \"视频云解析【全网解析】\" } ]";
+                FileOutputStream outputStream = this.openFileOutput(CONFIG_FILE_KEY, Context.MODE_PRIVATE);
+                outputStream.write(json.getBytes());
+                outputStream.close();
+                return json;
+            } catch (IOException ex) {
+                Log.i("AppSettingActivity", "配置文件创建失败", ex);
+                return null;
+            }
         } catch (IOException e) {
             Toast toast = Toast.makeText(this, "读取配置文件出错", Toast.LENGTH_LONG);
             toast.show();
@@ -147,8 +160,11 @@ public class AppSettingActivity extends AppCompatActivity {
 
         SharedPreferences.Editor editor = getSharedPreferences(APP_CONFIG_FILE_KEY, MODE_PRIVATE).edit();
         SelectItem selectedItem = (SelectItem) spinner.getSelectedItem();
-        editor.putString(DEFAULT_API_KEY, selectedItem.code);
-        editor.apply();
+        if (null != selectedItem) {
+            editor.putString(DEFAULT_API_KEY, selectedItem.code);
+            VideoPlayerActivity.default_api = selectedItem.code;
+            editor.apply();
+        }
 
         FileOutputStream outputStream = null;
         try {
@@ -162,6 +178,8 @@ public class AppSettingActivity extends AppCompatActivity {
             }
             JsonArray config = jsonElement.getAsJsonArray();
             if (config.size() == 0) {
+                Toast toast = Toast.makeText(this, "配置信息不能为空", Toast.LENGTH_SHORT);
+                toast.show();
                 return null;
             }
             outputStream.write(config.toString().getBytes());

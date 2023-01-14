@@ -41,6 +41,7 @@ import com.video.vip.player.common.FragmentKeyDown;
 import com.video.vip.player.common.UIController;
 import com.video.vip.player.filechooser.FileCompressor;
 import com.video.vip.player.utils.FileUtils;
+import com.video.vip.player.utils.StringUitls;
 import top.zibin.luban.Luban;
 
 import java.io.File;
@@ -159,7 +160,6 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 //			}
 //		});
         Bundle arguments = getArguments();
-        String web_url = arguments.getString(AgentWebFragment.WEB_URL_KEY);
         String web_title = arguments.getString(AgentWebFragment.WEB_TITLE_KEY);
         mTitleTextView = view.findViewById(R.id.toolbar_title);
         if (null != mTitleTextView) {
