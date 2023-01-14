@@ -108,13 +108,16 @@ public class MainActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(Color.WHITE);
         mToolbar.setTitle("");
         mTitleTextView = this.findViewById(R.id.toolbar_title);
-        mTitleTextView.setText("vip视频解析");
+        mTitleTextView.setText("vip浏览器");
         this.setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             // Enable the Up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mToolbar.setNavigationOnClickListener(v -> MainActivity.this.finish());
+        mToolbar.setNavigationOnClickListener(v ->{
+            MainActivity.this.finish();
+            System.exit(0);
+        });
 
         MyGridView gridView = this.findViewById(R.id.main_gridview);
 

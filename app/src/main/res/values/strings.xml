@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">vip视频解析</string>
+    <string name="app_name" translatable="false">vip浏览器</string>
     <string name="jx" translatable="false">解析</string>
     <string name="setting">设置</string>
     <string name="save">保存</string>
