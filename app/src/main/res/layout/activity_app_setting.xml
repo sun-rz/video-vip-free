@@ -54,9 +54,10 @@
             </TextView>
             <Spinner
                     android:id="@+id/spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_centerHorizontal="true"
+                    android:layout_width="fill_parent"
+                    android:ellipsize ="end"
+                    android:singleLine="true"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/text_area"/>
         </TableRow>
         <TableRow>
