@@ -24,6 +24,8 @@ import com.video.vip.player.common.GuideItemEntity;
 import com.video.vip.player.fragment.AgentWebFragment;
 import com.video.vip.player.widget.MyGridView;
 
+import java.io.File;
+
 import static com.video.vip.player.sonic.SonicJavaScriptInterface.PARAM_CLICK_TIME;
 
 /**
@@ -114,9 +116,8 @@ public class MainActivity extends AppCompatActivity {
             // Enable the Up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mToolbar.setNavigationOnClickListener(v ->{
+        mToolbar.setNavigationOnClickListener(v -> {
             MainActivity.this.finish();
-            System.exit(0);
         });
 
         MyGridView gridView = this.findViewById(R.id.main_gridview);
@@ -255,7 +256,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ServiceManager.getInstance().unpublish(mApi);
+        File dir = getApplicationContext().getCacheDir();
+        if (dir != null && dir.isDirectory()) {
+            deleteDir(dir);
+        }
+        System.exit(0);
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -274,7 +281,6 @@ public class MainActivity extends AppCompatActivity {
             exitTime = System.currentTimeMillis();
         } else {
             finish();
-            System.exit(0);
         }
     }
 
@@ -330,4 +336,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            if (children == null) {
+                return true;
+            }
+            for (String child : children) {
+                boolean success = deleteDir(new File(dir, child));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        if (dir == null) {
+            return true;
+        }
+        return dir.delete();
+    }
 }
