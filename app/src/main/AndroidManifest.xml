@@ -26,7 +26,8 @@
             android:supportsRtl="true"
             android:requestLegacyExternalStorage="true"
             android:theme="@style/BaseAppTheme">
-        <activity android:name="com.video.vip.player.activity.MainActivity">
+        <activity android:name="com.video.vip.player.activity.MainActivity"
+                  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -35,58 +36,58 @@
         </activity>
         <activity
                 android:name="com.video.vip.player.activity.WebActivity"
-                android:launchMode="singleTop" />
+                android:launchMode="singleTop"/>
 
         <activity
                 android:name="com.video.vip.player.activity.RemoteWebViewlActivity"
                 android:launchMode="singleTop"
-                android:process=":web" />
+                android:process=":web"/>
 
         <service
                 android:name=".service.WebService"
-                android:process=":web" />
+                android:process=":web"/>
 
         <activity
                 android:name="com.video.vip.player.activity.CommonActivity"
                 android:configChanges="orientation|screenSize"
                 android:hardwareAccelerated="true"
-                android:launchMode="singleTop" />
+                android:launchMode="singleTop"/>
         <activity
                 android:name="com.video.vip.player.activity.EasyWebActivity"
                 android:configChanges="orientation|screenSize"
-                android:launchMode="singleTop" />
+                android:launchMode="singleTop"/>
 
         <activity
                 android:name="com.video.vip.player.activity.ContainerActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="fullSensor" />
-        <activity android:name=".activity.AutoHidenToolbarActivity" />
+                android:screenOrientation="fullSensor"/>
+        <activity android:name=".activity.AutoHidenToolbarActivity"/>
 
         <activity
                 android:name=".activity.NativeDownloadActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="fullSensor" />
+                android:screenOrientation="fullSensor"/>
 
         <provider
                 android:name=".provider.ServiceProvider"
-                android:authorities="com.video.vip.player" />
+                android:authorities="com.video.vip.player"/>
 
         <provider
                 android:name=".provider.WebServiceProvider"
                 android:authorities="com.video.vip.player.web"
-                android:process=":web" />
+                android:process=":web"/>
 
         <activity
                 android:exported="true"
                 android:name=".activity.ExternalActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
                 <!--BROWSABLE指定该Activity能被浏览器安全调用-->
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                         android:host="sample.just.com"
-                        android:scheme="agentweb" />
+                        android:scheme="agentweb"/>
             </intent-filter>
         </activity>
 
@@ -94,7 +95,8 @@
                 android:name="com.video.vip.player.activity.AppSettingActivity"/>
         <activity
                 android:name="com.video.vip.player.activity.VideoPlayerActivity"
-                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+                android:hardwareAccelerated="true"
                 android:screenOrientation="sensor"
         />
     </application>

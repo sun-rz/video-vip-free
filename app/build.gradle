@@ -7,7 +7,7 @@ android {
     buildToolsVersion "33.0.1"
     defaultConfig {
         applicationId "com.video.vip.player"
-        minSdkVersion 29
+        minSdkVersion 23
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
@@ -72,4 +72,5 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'androidx.mediarouter:mediarouter:1.0.0'
+    implementation 'com.github.CodingEnding:PopupLayout:v1.0'
 }

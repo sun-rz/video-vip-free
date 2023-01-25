@@ -1,11 +1,8 @@
 package com.video.vip.player.activity;
 
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -52,24 +49,10 @@ public class VideoPlayerActivity extends AppCompatActivity {
             mBundle.putString(AgentWebFragment.URL_KEY, default_api + web_url);
             mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, false);
             mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, false);
+            mBundle.putBoolean(AgentWebFragment.SHOW_TP_KEY, false);
             String web_title = getIntent().getStringExtra(AgentWebFragment.WEB_TITLE_KEY);
             mBundle.putString(AgentWebFragment.WEB_TITLE_KEY, web_title);
         }
         ft.commit();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // 横屏
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            // 竖屏
-            if ((getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
-                // 是全屏
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            }
-        }
-        super.onConfigurationChanged(newConfig);
     }
 }

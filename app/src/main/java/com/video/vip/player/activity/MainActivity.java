@@ -20,6 +20,7 @@ import com.flyingpigeon.library.annotations.thread.MainThread;
 import com.just.agentweb.AgentWebConfig;
 import com.video.vip.player.R;
 import com.video.vip.player.api.Api;
+import com.video.vip.player.app.App;
 import com.video.vip.player.common.GuideItemEntity;
 import com.video.vip.player.fragment.AgentWebFragment;
 import com.video.vip.player.widget.MyGridView;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             new GuideItemEntity("腾讯视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.txsp, "https://v.qq.com/"),
             new GuideItemEntity("乐视视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.lssp, "http://www.le.com/"),
             new GuideItemEntity("芒果TV", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.mgtv, "https://www.mgtv.com/"),
-            //new GuideItemEntity("土豆视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH,R.mipmap.tdsp),
+            new GuideItemEntity("优酷视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH,R.mipmap.yksp,"https://youku.com/"),
             new GuideItemEntity("PPTV", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.pptv, "https://www.pptv.com/"),
             new GuideItemEntity("搜狐视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.shsp, "https://tv.sohu.com/#_pageb"),
             new GuideItemEntity("百度", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH, R.mipmap.baidu, "https://www.baidu.com/"),

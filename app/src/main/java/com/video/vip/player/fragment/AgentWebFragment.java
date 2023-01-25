@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
+import com.codingending.popuplayout.PopupLayout;
 import com.download.library.DownloadImpl;
 import com.download.library.DownloadListenerAdapter;
 import com.download.library.Extra;
@@ -41,12 +42,13 @@ import com.video.vip.player.common.FragmentKeyDown;
 import com.video.vip.player.common.UIController;
 import com.video.vip.player.filechooser.FileCompressor;
 import com.video.vip.player.utils.FileUtils;
-import com.video.vip.player.utils.StringUitls;
 import top.zibin.luban.Luban;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -65,12 +67,14 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     public static final String URL_KEY = "url_key";
     public static final String SHOW_SEARCH_KEY = "show_search";
     public static final String SHOW_PLAYER_KEY = "show_player";
+    public static final String SHOW_TP_KEY = "show_tp";
     public static final String WEB_URL_KEY = "web_url";
     public static final String WEB_TITLE_KEY = "web_title";
 
     private String webTitle = null;
     private ImageView mMoreImageView;
     private PopupMenu mPopupMenu;
+
     /**
      * 用于方便打印测试
      */
@@ -101,6 +105,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ImageView mSearchImageView = view.findViewById(R.id.iv_search);
         ImageView mJxImageView = view.findViewById(R.id.iv_jx);
+        ImageView mTpImageView = view.findViewById(R.id.iv_tp);
         Bundle bundle = this.getArguments();
         if (null != mSearchImageView) {
             boolean aBoolean = bundle.getBoolean(SHOW_SEARCH_KEY);
@@ -114,6 +119,12 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                 mJxImageView.setVisibility(View.GONE);
             }
         }
+        if (null != mTpImageView) {
+            boolean aBoolean = bundle.getBoolean(SHOW_TP_KEY);
+            if (aBoolean) {
+                mTpImageView.setVisibility(View.VISIBLE);
+            }
+        }
         super.onViewCreated(view, savedInstanceState);
 
 
@@ -122,7 +133,22 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                 .useDefaultIndicator(-1, 3)//设置进度条颜色与高度，-1为默认值，高度为2，单位为dp。
                 .setAgentWebWebSettings(getSettings())//设置 IAgentWebSettings。
                 .setWebViewClient(mWebViewClient)//WebViewClient ， 与 WebView 使用一致 ，但是请勿获取WebView调用setWebViewClient(xx)方法了,会覆盖AgentWeb DefaultWebClient,同时相应的中间件也会失效。
-                .setWebChromeClient(new CommonWebChromeClient()) //WebChromeClient
+                .setWebChromeClient(new CommonWebChromeClient() {
+                    @Override
+                    public void onShowCustomView(View view, CustomViewCallback callback) {
+                        //点击Video标签全屏播放按钮时，会回调WebChromeClient的onShowCustomView()方法
+                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        super.onShowCustomView(view, callback);
+                    }
+
+                    @Override
+                    public void onHideCustomView() {
+                        //退出全屏时会回调onHideCustomView()方法
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                        super.onHideCustomView();
+                    }
+
+                }) //WebChromeClient
                 .setPermissionInterceptor(mPermissionInterceptor) //权限拦截 2.0.0 加入。
                 .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK) //严格模式 Android 4.2.2 以下会放弃注入对象 ，使用AgentWebView没影响。
                 .setAgentWebUIController(new UIController(getActivity())) //自定义UI  AgentWeb3.0.0 加入。
@@ -391,6 +417,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     private SimpleSearchView mSimpleSearchView;
     private ImageView mSearchImageView;
     private ImageView mJxImageView;
+    private ImageView mTpImageView;
 
     protected void initView(View view) {
         //mBackImageView = view.findViewById(R.id.iv_back);
@@ -401,6 +428,9 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
         mFinishImageView.setOnClickListener(mOnClickListener);
         mJxImageView = view.findViewById(R.id.iv_jx);
         mJxImageView.setOnClickListener(mOnClickListener);
+        mTpImageView = view.findViewById(R.id.iv_tp);
+        mTpImageView.setOnClickListener(mOnClickListener);
+
         mMoreImageView = view.findViewById(R.id.iv_more);
         mMoreImageView.setOnClickListener(mOnClickListener);
         mSearchImageView = view.findViewById(R.id.iv_search);
@@ -473,6 +503,18 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                     intent.putExtra(WEB_URL_KEY, mAgentWeb.getWebCreator().getWebView().getUrl());
                     intent.putExtra(WEB_TITLE_KEY, webTitle);
                     startActivity(intent);
+                    break;
+                case R.id.iv_tp:
+                    View view = View.inflate(getContext(), R.layout.layout_right, null);
+                    initListView(view);
+                    PopupLayout popupLayout = PopupLayout.init(getContext(), view);
+                    popupLayout.setUseRadius(true);
+                    popupLayout.show(PopupLayout.POSITION_RIGHT);
+                    ListView listView = view.findViewById(R.id.device_list);
+                    listView.setOnItemClickListener((adapterView, view1, position, id) -> {
+
+                        popupLayout.dismiss();
+                    });
                     break;
                 default:
                     break;
@@ -759,4 +801,19 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
             return String.format(Locale.getDefault(), "%.1fGB", (double) byteNum / 1073741824);
         }
     }
+
+    //获取示例ListView
+    private void initListView(View parent) {
+        ListView listView = parent.findViewById(R.id.device_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, getDataList());
+        listView.setAdapter(adapter);
+    }
+
+    //获取列表的演示数据
+    private List<String> getDataList() {
+        List<String> list = new ArrayList<>();
+
+        return list;
+    }
+
 }

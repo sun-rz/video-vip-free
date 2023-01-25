@@ -70,7 +70,7 @@
                     android:src="@drawable/ic_baseline_search_24"
                     android:scaleType="center"
                     android:tint="@color/white"
-                    android:layout_toLeftOf="@+id/iv_more"
+                    android:layout_toLeftOf="@+id/iv_jx"
                     android:background="@drawable/iv_back_selector"
             />
 
@@ -81,7 +81,19 @@
                     android:src="@drawable/btn_jx"
                     android:scaleType="center"
                     android:tint="@color/white"
+                    android:layout_toLeftOf="@+id/iv_tp"
+                    android:background="@drawable/iv_back_selector"
+            />
+
+            <ImageView
+                    android:id="@+id/iv_tp"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/btn_tp"
+                    android:scaleType="center"
+                    android:tint="@color/white"
                     android:layout_toLeftOf="@+id/iv_more"
+                    android:visibility="gone"
                     android:background="@drawable/iv_back_selector"
             />
 
