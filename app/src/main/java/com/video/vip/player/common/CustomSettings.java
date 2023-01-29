@@ -41,7 +41,11 @@ public class CustomSettings extends AbsAgentWebSettings {
         getWebSettings().setDefaultFontSize(16);
         getWebSettings().setMinimumFontSize(12);//设置 WebView 支持的最小字体大小，默认为 8
         getWebSettings().setGeolocationEnabled(true);
-        getWebSettings().setUserAgentString(getWebSettings().getUserAgentString().concat("agentweb/3.1.0"));
+        String setting = getWebSettings().getUserAgentString().concat("agentweb/3.1.0");
+        if (!setting.contains("Mobile")) {
+            setting = setting.concat("Mobile");
+        }
+        getWebSettings().setUserAgentString(setting);
         return this;
     }
 

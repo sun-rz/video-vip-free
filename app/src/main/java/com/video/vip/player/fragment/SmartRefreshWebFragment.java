@@ -7,8 +7,10 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import androidx.annotation.Nullable;
+import com.just.agentweb.IAgentWebSettings;
 import com.just.agentweb.IWebLayout;
 import com.video.vip.player.R;
+import com.video.vip.player.common.CustomSettings;
 import com.video.vip.player.widget.SmartRefreshWebLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -83,5 +85,8 @@ public class SmartRefreshWebFragment extends BounceWebFragment {
 
     }
 
-
+    @Override
+    public IAgentWebSettings getSettings() {
+        return new CustomSettings(getActivity());
+    }
 }

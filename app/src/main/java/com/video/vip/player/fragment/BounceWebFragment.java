@@ -53,10 +53,8 @@ public class BounceWebFragment extends AgentWebFragment {
 				.ready()//
 				.go(getUrl());
 		// 得到 AgentWeb 最底层的控件
-		addBGChild((FrameLayout) mAgentWeb.getWebCreator().getWebParentLayout());
+		addBGChild(mAgentWeb.getWebCreator().getWebParentLayout());
 		initView(view);
-
-
 	}
 
 	protected IWebLayout getWebLayout() {
