@@ -62,20 +62,31 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
     private String convertURL(String url) {
         if (url.contains("v.qq.com")) {
-            String cid = getParm(url, "cid");
-            url = "https://v.qq.com/x/cover/" + cid + ".html";
+            String cid = getParm(url);
+            url = "https://v.qq.com/x/cover/" + cid;
         }
         return url;
     }
 
-    public String getParm(String urlStr, String field) {
-        String result = "";
-        Pattern pXM = Pattern.compile(field + "=([^&]*)");
-        Matcher mXM = pXM.matcher(urlStr);
-        if (mXM.find()) {
-            result = mXM.group(1);
-        }
-        return result;
-    }
+    private static Pattern pCid = Pattern.compile("cid=([^&]*)");
+    private static Pattern pVid = Pattern.compile("vid=([^&]*)");
 
+    public String getParm(String urlStr) {
+        String cid = "";
+
+        Matcher mCid = pCid.matcher(urlStr);
+        if (mCid.find()) {
+            cid = mCid.group(1);
+        }
+        String pid = "";
+
+        Matcher mVid = pVid.matcher(urlStr);
+        if (mVid.find()) {
+            pid = mVid.group(1);
+        }
+        if (StringUtils.isBlank(pid)) {
+            return cid + ".html";
+        }
+        return cid + "/" + pid + ".html";
+    }
 }

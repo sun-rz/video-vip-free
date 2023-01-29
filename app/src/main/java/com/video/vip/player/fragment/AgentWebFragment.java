@@ -367,6 +367,9 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 
+            //自动播放
+            view.getSettings().setMediaPlaybackRequiresUserGesture(false);
+
             if (timer.get(url) != null) {
                 long overTime = System.currentTimeMillis();
                 Long startTime = timer.get(url);
