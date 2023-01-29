@@ -3,6 +3,7 @@ package com.video.vip.player.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,16 +18,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.flyingpigeon.library.ServiceManager;
 import com.flyingpigeon.library.annotations.thread.MainThread;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.just.agentweb.AgentWebConfig;
 import com.video.vip.player.R;
 import com.video.vip.player.api.Api;
-import com.video.vip.player.app.App;
+import com.video.vip.player.bean.SelectItem;
 import com.video.vip.player.common.GuideItemEntity;
 import com.video.vip.player.fragment.AgentWebFragment;
 import com.video.vip.player.widget.MyGridView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 
+import static com.video.vip.player.activity.AppSettingActivity.*;
 import static com.video.vip.player.sonic.SonicJavaScriptInterface.PARAM_CLICK_TIME;
 
 /**
@@ -71,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             new GuideItemEntity("腾讯视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.txsp, "https://v.qq.com/"),
             new GuideItemEntity("乐视视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.lssp, "http://www.le.com/"),
             new GuideItemEntity("芒果TV", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.mgtv, "https://www.mgtv.com/"),
-            new GuideItemEntity("优酷视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH,R.mipmap.yksp,"https://youku.com/"),
+            new GuideItemEntity("优酷视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.yksp, "https://youku.com/"),
             new GuideItemEntity("PPTV", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.pptv, "https://www.pptv.com/"),
             new GuideItemEntity("搜狐视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.shsp, "https://tv.sohu.com/#_pageb"),
             new GuideItemEntity("百度", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH, R.mipmap.baidu, "https://www.baidu.com/"),
@@ -135,6 +146,30 @@ public class MainActivity extends AppCompatActivity {
 
         AgentWebConfig.debug();
         ServiceManager.getInstance().publish(mApi);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(APP_CONFIG_FILE_KEY, MODE_PRIVATE);
+        int api_version = sharedPreferences.getInt(API_VERSION_KEY, 0);
+        if (api_version < 1) {
+            SharedPreferences.Editor editor = getSharedPreferences(APP_CONFIG_FILE_KEY, MODE_PRIVATE).edit();
+            editor.putInt(API_VERSION_KEY, 1);
+            editor.putString(DEFAULT_API_KEY, "https://jx.quankan.app/?url=");
+            editor.apply();
+            FileOutputStream outputStream = null;
+            try {
+                outputStream = this.openFileOutput(CONFIG_FILE_KEY, Context.MODE_PRIVATE);
+                outputStream.write(JSONCONF.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (null != outputStream) {
+                    try {
+                        outputStream.close();
+                    } catch (IOException e) {
+                        Log.e("AppSettingActivity", "写入配置文件出错", e);
+                    }
+                }
+            }
+        }
     }
 
     private Api mApi = new Api() {

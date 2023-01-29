@@ -8,7 +8,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.video.vip.player.R;
 import com.video.vip.player.fragment.*;
-import com.video.vip.player.utils.StringUitls;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.video.vip.player.activity.MainActivity.*;
 
@@ -27,9 +30,9 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_common);
 
-        if(StringUitls.isBlank(default_api)) {
+        if (StringUtils.isBlank(default_api)) {
             SharedPreferences sharedPreferences = getSharedPreferences(AppSettingActivity.APP_CONFIG_FILE_KEY, MODE_PRIVATE);
-            default_api = sharedPreferences.getString(AppSettingActivity.DEFAULT_API_KEY, "https://jx.aidouer.net/?url=");
+            default_api = sharedPreferences.getString(AppSettingActivity.DEFAULT_API_KEY, "https://jx.quankan.app/?url=");
         }
 
         mFrameLayout = this.findViewById(R.id.container_framelayout);
@@ -46,6 +49,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
         if (key == FLAG_GUIDE_DICTIONARY_VIDEO_FULL_SCREEN) {
             ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
             String web_url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
+            web_url = convertURL(web_url);
             mBundle.putString(AgentWebFragment.URL_KEY, default_api + web_url);
             mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, false);
             mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, false);
@@ -55,4 +59,23 @@ public class VideoPlayerActivity extends AppCompatActivity {
         }
         ft.commit();
     }
+
+    private String convertURL(String url) {
+        if (url.contains("v.qq.com")) {
+            String cid = getParm(url, "cid");
+            url = "https://v.qq.com/x/cover/" + cid + ".html";
+        }
+        return url;
+    }
+
+    public String getParm(String urlStr, String field) {
+        String result = "";
+        Pattern pXM = Pattern.compile(field + "=([^&]*)");
+        Matcher mXM = pXM.matcher(urlStr);
+        if (mXM.find()) {
+            result = mXM.group(1);
+        }
+        return result;
+    }
+
 }

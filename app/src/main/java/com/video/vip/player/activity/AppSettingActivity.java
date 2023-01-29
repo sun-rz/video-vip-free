@@ -12,7 +12,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.video.vip.player.R;
 import com.video.vip.player.bean.SelectItem;
-import com.video.vip.player.utils.StringUitls;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,9 +21,11 @@ import java.util.Optional;
 
 public class AppSettingActivity extends AppCompatActivity {
 
-    public final String CONFIG_FILE_KEY = "config.json";
+    public static final String CONFIG_FILE_KEY = "config.json";
     public static final String DEFAULT_API_KEY = "default_api";
+    public static final String API_VERSION_KEY = "api_version";
     public static final String APP_CONFIG_FILE_KEY = "WebViewChromiumPrefs";
+    public static final String JSONCONF="[ { \"code\": \"https://jx.quankan.app/?url=\", \"title\": \"默认\" }, { \"code\": \"https://jie.taotaosha.top/?url=\", \"title\": \"奈落影视\" }, { \"code\": \"http://jx.aidouer.net/?url=\", \"title\": \"视频云解析【全网解析】\" }, { \"code\": \"https://jx.xmflv.com/?url=\", \"title\": \"虾米解析\" }, { \"code\": \"https://okjx.cc/?url=\", \"title\": \"OK解析\" }, { \"code\": \"https://bd.jx.cn/?url=\", \"title\": \"冰豆解析\" }, { \"code\": \"https://jx.4kdv.com/?url=\", \"title\": \"4K解析\" } ]";
 
     private TextView textView;
     private ArrayAdapter<SelectItem> adapterArr;
@@ -53,13 +55,13 @@ public class AppSettingActivity extends AppCompatActivity {
          final SelectItem[] defaultItem = {null};
 
         String config = getConfig();
-        if (!StringUitls.isBlank(config)) {
+        if (!StringUtils.isBlank(config)) {
             textView.setText(config);
             List<SelectItem> selectItems = gson.fromJson(config, new TypeToken<List<SelectItem>>() {
             }.getType());
             //适配器
             adapterArr = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectItems);
-            if (!StringUitls.isBlank(default_api)) {
+            if (!StringUtils.isBlank(default_api)) {
                 Optional<SelectItem> first = selectItems.stream().filter(selectItem -> selectItem.code.equals(default_api)).findFirst();
                 first.ifPresent(selectItem -> defaultItem[0] = selectItem);
             } else {
@@ -98,7 +100,7 @@ public class AppSettingActivity extends AppCompatActivity {
         Button mButton = this.findViewById(R.id.btn_save);
         mButton.setOnClickListener(v -> {
             String apiConfig = textView.getText().toString();
-            if (StringUitls.isBlank(apiConfig)) {
+            if (StringUtils.isBlank(apiConfig)) {
                 return;
             }
             List<SelectItem> selectItems = saveJsonConfig(apiConfig);
@@ -128,11 +130,10 @@ public class AppSettingActivity extends AppCompatActivity {
             return stream.toString();
         } catch (FileNotFoundException e) {
             try {
-                String json="[ { \"code\": \"http://pangujiexi.cc/jiexi.php?url=\", \"title\": \"视频解析地址【全网解析(广告)】\" }, { \"code\": \"http://www.ckmov.vip/api.php?url=\", \"title\": \"优先VIP解析引擎系统【全网解析(广告)】\" }, { \"code\": \"http://jx.xmflv.com/?url=\", \"title\": \"虾米视频解析【PC电脑解析】\" }, { \"code\": \"http://jx.aidouer.net/?url=\", \"title\": \"视频云解析【全网解析】\" }, { \"code\": \"http://jx.m3u8.tv/jiexi/?url=\", \"title\": \"无广告视频解析【全网解析】\" }, { \"code\": \"http://z1.im1907.top/?jx=\", \"title\": \"输入片名自动解析【NEW】\" }, { \"code\": \"http://svip.bljiex.cc/?v=\", \"title\": \"VIP极解析【记忆播放】\" }, { \"code\": \"http://z1.m1907.cn/?jx=\", \"title\": \"测试解析【全网解析】\" }, { \"code\": \"http://jiexi.8old.cn/m3u8tv20210705%60/?url=\", \"title\": \"广告超速解析【通用】\" }, { \"code\": \"http://jx.m3u8.tv/jiexi/?url=\", \"title\": \"测试解析【全网解析】\" }, { \"code\": \"http://www.nxflv.com/?url=\", \"title\": \"测试解析二【PC电脑解析】\" }, { \"code\": \"http://www.h8jx.com/jiexi.php?url=\", \"title\": \"测试解析三【全网解析】\" }, { \"code\": \"http://okjx.cc/?url=\", \"title\": \"VIP解析【PC电脑解析】\" }, { \"code\": \"http://www.1717yun.com/jx/ty.php?url=\", \"title\": \"VIP解析二【PC电脑解析】\" }, { \"code\": \"http://parse.123mingren.com/?url=\", \"title\": \"VIP解析三【全网解析】\" }, { \"code\": \"http://www.administratorw.com/index/qqvod.php?url=\", \"title\": \"VIP解析四【全网解析】\" }, { \"code\": \"http://jx.000180.top/jx/?url=\", \"title\": \"观察解析【全网解析】\" }, { \"code\": \"http://jiexi44.qmbo.cn/jiexi/?url=\", \"title\": \"①vip专用解析（推荐）\" }, { \"code\": \"http://okjx.cc/?url=\", \"title\": \"一号通用vip引擎系统 【稳定通用】\" }, { \"code\": \"http://jx.m3u8.tv/jiexi/?url=\", \"title\": \"②通道\" }, { \"code\": \"http://jx.ivito.cn/?url=\", \"title\": \"③蓝光通道\" }, { \"code\": \"http://jx.ivito.cn/?url=\", \"title\": \"视频解析地址【全网解析(广告)】\" }, { \"code\": \"http://www.ckmov.vip/api.php?url=\", \"title\": \"优先VIP解析引擎系统【全网解析(广告)】\" }, { \"code\": \"http://jx.xmflv.com/?url=\", \"title\": \"虾米视频解析【PC电脑解析】\" }, { \"code\": \"http://jx.aidouer.net/?url=\", \"title\": \"视频云解析【全网解析】\" }, { \"code\": \"http://jx.m3u8.tv/jiexi/?url=\", \"title\": \"无广告视频解析【全网解析】\" }, { \"code\": \"http://z1.im1907.top/?jx=\", \"title\": \"输入片名自动解析【NEW】\" }, { \"code\": \"http://www.ckmov.vip/api.php?url=\", \"title\": \"无广告解析【全网解析】\" }, { \"code\": \"http://pangujiexi.cc/jiexi.php?url=\", \"title\": \"盘古视频解析【PC电脑解析】\" }, { \"code\": \"http://z1.m1907.cn/?jx=\", \"title\": \"测试解析【全网解析】\" }, { \"code\": \"http://jiexi.8old.cn/m3u8tv20210705%60/?url=\", \"title\": \"广告超速解析【通用】\" }, { \"code\": \"http://jx.m3u8.tv/jiexi/?url=\", \"title\": \"测试解析【全网解析】\" }, { \"code\": \"http://www.nxflv.com/?url=\", \"title\": \"测试解析二【PC电脑解析】\" }, { \"code\": \"http://55o.co/?url=\", \"title\": \"测试解析三【全网解析】\" }, { \"code\": \"http://jx.ivito.cn/?url=\", \"title\": \"VIP解析【PC电脑解析】\" }, { \"code\": \"http://www.1717yun.com/jx/ty.php?url=\", \"title\": \"VIP解析二【PC电脑解析】\" }, { \"code\": \"http://parse.123mingren.com/?url=\", \"title\": \"VIP解析三【全网解析】\" }, { \"code\": \"http://www.administratorw.com/index/qqvod.php?url=\", \"title\": \"VIP解析四【全网解析】\" }, { \"code\": \"http://www.8090g.cn/?url=\", \"title\": \"观察解析【全网解析(广告)】\" }, { \"code\": \"http://jx.000180.top/jx/?url=\", \"title\": \"观察解析二【全网解析】\" }, { \"code\": \"https://55o.co/?url=\", \"title\": \"视频解析地址【全网解析(弹幕)】\" }, { \"code\": \"http://jx.ivito.cn/?url=\", \"title\": \"视频解析地址【全网解析(广告)】\" }, { \"code\": \"http://www.ckmov.vip/api.php?url=\", \"title\": \"优先VIP解析引擎系统【全网解析(广告)】\" }, { \"code\": \"http://pangujiexi.cc/jiexi.php?url=\", \"title\": \"盘古视频解析【PC电脑解析】\" }, { \"code\": \"http://jx.xmflv.com/?url=\", \"title\": \"虾米视频解析【PC电脑解析】\" }, { \"code\": \"http://jx.aidouer.net/?url=\", \"title\": \"视频云解析【全网解析】\" } ]";
                 FileOutputStream outputStream = this.openFileOutput(CONFIG_FILE_KEY, Context.MODE_PRIVATE);
-                outputStream.write(json.getBytes());
+                outputStream.write(JSONCONF.getBytes());
                 outputStream.close();
-                return json;
+                return JSONCONF;
             } catch (IOException ex) {
                 Log.i("AppSettingActivity", "配置文件创建失败", ex);
                 return null;
