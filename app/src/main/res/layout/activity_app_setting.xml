@@ -33,7 +33,7 @@
         <TableRow>
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/third_api"
-                    android:enabled="true"
+                    android:enabled="false"
                     android:gravity="top"
                     android:hint="@string/api_config"
                     android:layout_width="wrap_content"

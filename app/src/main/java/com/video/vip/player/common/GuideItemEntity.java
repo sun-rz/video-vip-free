@@ -16,24 +16,62 @@
 
 package com.video.vip.player.common;
 
+import java.io.Serializable;
+
 /**
  * @author cenxiaozhong
  * @date 2018/7/15
  * @since 1.0.0
  */
-public class GuideItemEntity {
+public class GuideItemEntity implements Serializable {
 
+	private int id;
 	private String guideTitle;
 	private int guideDictionary;
 	private int extra;
 	private int image;
 	private String url;
+	private String pc_url;
 
 	public GuideItemEntity(String guideTitle, int guideDictionary, int image,String url) {
 		this.guideTitle = guideTitle;
 		this.guideDictionary = guideDictionary;
 		this.image = image;
 		this.url = url;
+	}
+
+	public GuideItemEntity(String guideTitle, int guideDictionary, int extra, int image, String url) {
+		this.id = id;
+		this.guideTitle = guideTitle;
+		this.guideDictionary = guideDictionary;
+		this.extra = extra;
+		this.image = image;
+		this.url = url;
+	}
+
+	public GuideItemEntity(int id, String guideTitle, int guideDictionary, int extra, int image, String url) {
+		this.id = id;
+		this.guideTitle = guideTitle;
+		this.guideDictionary = guideDictionary;
+		this.extra = extra;
+		this.image = image;
+		this.url = url;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getExtra() {
+		return extra;
+	}
+
+	public void setExtra(int extra) {
+		this.extra = extra;
 	}
 
 	public String getGuideTitle() {
@@ -66,5 +104,13 @@ public class GuideItemEntity {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getPc_url() {
+		return pc_url;
+	}
+
+	public void setPc_url(String pc_url) {
+		this.pc_url = pc_url;
 	}
 }

@@ -310,6 +310,20 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
             webTitle = title;
             mTitleTextView.setText(title);
         }
+
+        @Override
+        public void onShowCustomView(View view, CustomViewCallback callback) {
+            //点击Video标签全屏播放按钮时，会回调WebChromeClient的onShowCustomView()方法
+            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            super.onShowCustomView(view, callback);
+        }
+
+        @Override
+        public void onHideCustomView() {
+            //退出全屏时会回调onHideCustomView()方法
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            super.onHideCustomView();
+        }
     };
     /**
      * 注意，重写WebViewClient的方法,super.xxx()请务必正确调用， 如果没有调用super.xxx(),则无法执行DefaultWebClient的方法
@@ -449,7 +463,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
             public boolean onQueryTextSubmit(String s) {
                 String completeUrl = s;
                 if (!completeUrl.startsWith("http")) {
-                    completeUrl = "http://" + s;
+                    completeUrl = "https://www.baidu.com/s?wd=" + s;
                 }
                 mAgentWeb.getUrlLoader().loadUrl(completeUrl);
                 return false;
@@ -500,6 +514,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                     break;
                 case R.id.iv_search:
                     mSimpleSearchView.showSearch();
+                    mSimpleSearchView.setQuery(mAgentWeb.getWebCreator().getWebView().getUrl(),false);
                     break;
                 case R.id.iv_jx:
                     Intent intent = new Intent(App.mContext, VideoPlayerActivity.class);
