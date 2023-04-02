@@ -1,6 +1,7 @@
 package com.video.vip.player.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;;
 import androidx.fragment.app.FragmentManager;
@@ -9,7 +10,6 @@ import com.video.vip.player.R;
 import com.video.vip.player.bean.ApiURLConfig;
 import com.video.vip.player.db.AppSettingManager;
 import com.video.vip.player.fragment.*;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,6 +55,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
             String web_url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
             web_url = convertURL(web_url);
             mBundle.putString(AgentWebFragment.URL_KEY, defaultApi.getCode() + web_url);
+            mBundle.putString(AgentWebFragment.WEB_URL_KEY, web_url);
             mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, false);
             mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, false);
             mBundle.putBoolean(AgentWebFragment.SHOW_TP_KEY, false);
@@ -105,7 +106,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
         if (mVid.find()) {
             pid = mVid.group(1);
         }
-        if (StringUtils.isBlank(pid)) {
+        if (TextUtils.isEmpty(pid)) {
             return cid + ".html";
         }
         return cid + "/" + pid + ".html";

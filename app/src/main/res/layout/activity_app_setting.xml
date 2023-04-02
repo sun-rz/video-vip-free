@@ -30,23 +30,7 @@
                  android:layout_width="fill_parent"
                  android:stretchColumns="1"
                  android:layout_height="fill_parent">
-        <TableRow>
-            <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/third_api"
-                    android:enabled="false"
-                    android:gravity="top"
-                    android:hint="@string/api_config"
-                    android:layout_width="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:minLines="20"
-                    android:maxLines="20"
-                    android:layout_column="0"
-                    android:layout_span="2"
-                    android:singleLine="false"
-                    android:scrollbars="vertical"
-                    android:layout_weight="1"
-                    android:background="@drawable/text_area"/>
-        </TableRow>
+
         <TableRow android:paddingTop="15dp">
             <TextView android:layout_width="fill_parent"
                       android:layout_height="fill_parent"

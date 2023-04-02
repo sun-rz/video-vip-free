@@ -35,11 +35,13 @@ import com.video.vip.player.R;
 import com.video.vip.player.activity.AppSettingActivity;
 import com.video.vip.player.activity.VideoPlayerActivity;
 import com.video.vip.player.app.App;
+import com.video.vip.player.bean.ApiURLConfig;
 import com.video.vip.player.client.MiddlewareChromeClient;
 import com.video.vip.player.client.MiddlewareWebViewClient;
 import com.video.vip.player.common.CommonWebChromeClient;
 import com.video.vip.player.common.FragmentKeyDown;
 import com.video.vip.player.common.UIController;
+import com.video.vip.player.db.AppSettingManager;
 import com.video.vip.player.filechooser.FileCompressor;
 import com.video.vip.player.utils.FileUtils;
 import top.zibin.luban.Luban;
@@ -74,6 +76,8 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     private String webTitle = null;
     private ImageView mMoreImageView;
     private PopupMenu mPopupMenu;
+
+    private MenuItem chooseApi;
 
     /**
      * 用于方便打印测试
@@ -514,7 +518,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                     break;
                 case R.id.iv_search:
                     mSimpleSearchView.showSearch();
-                    mSimpleSearchView.setQuery(mAgentWeb.getWebCreator().getWebView().getUrl(),false);
+                    mSimpleSearchView.setQuery(mAgentWeb.getWebCreator().getWebView().getUrl(), false);
                     break;
                 case R.id.iv_jx:
                     Intent intent = new Intent(App.mContext, VideoPlayerActivity.class);
@@ -569,8 +573,30 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
         if (mPopupMenu == null) {
             mPopupMenu = new PopupMenu(this.getActivity(), view);
             mPopupMenu.inflate(R.menu.toolbar_menu);
+            Menu menu = mPopupMenu.getMenu();
+            MenuItem item = menu.getItem(menu.size() - 1);
+            SubMenu subItem = item.getSubMenu();
+            AppSettingManager appSettingManager = new AppSettingManager(getContext());
+            List<ApiURLConfig> configList = appSettingManager.query();
+            for (int i = 0; i < configList.size(); i++) {
+                ApiURLConfig apiURLConfig = configList.get(i);
+                MenuItem menuItem = subItem.add(R.id.choose_api, apiURLConfig.getId(), i, apiURLConfig.getTitle());
+                menuItem.setTitleCondensed(apiURLConfig.getCode());
+                menuItem.setIcon(apiURLConfig.getIs_default() == 1 ? R.drawable.choose_api_checked : R.drawable.choose_api_unchacked);
+            }
             mPopupMenu.setOnMenuItemClickListener(mOnMenuItemClickListener);
         }
+
+        if (chooseApi != null) {
+            Menu menu = mPopupMenu.getMenu();
+            MenuItem menuItem = menu.getItem(menu.size() - 1);
+            SubMenu subItem = menuItem.getSubMenu();
+            for (int i = 0; i < subItem.size(); i++) {
+                MenuItem item = subItem.getItem(i);
+                item.setIcon(item.getItemId() == chooseApi.getItemId() ? R.drawable.choose_api_checked : R.drawable.choose_api_unchacked);
+            }
+        }
+
         mPopupMenu.show();
     }
 
@@ -583,11 +609,11 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 
             switch (item.getItemId()) {
 
-                case R.id.refresh:
+                /*case R.id.refresh:
                     if (mAgentWeb != null) {
                         mAgentWeb.getUrlLoader().reload(); // 刷新
                     }
-                    return true;
+                    return true;*/
 
                 case R.id.copy:
                     if (mAgentWeb != null) {
@@ -621,6 +647,19 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                     startActivity(intent);
                     return true;
                 default:
+                    CharSequence titleCondensed = item.getTitleCondensed();
+                    if (TextUtils.isEmpty(titleCondensed)) {
+                        return false;
+                    }
+                    if (titleCondensed.toString().startsWith("http")) {
+                        if (mAgentWeb != null) {
+                            chooseApi = item;
+                            Bundle arguments = getArguments();
+                            String web_url = arguments.getString(AgentWebFragment.WEB_URL_KEY);
+                            mAgentWeb.getUrlLoader().loadUrl(titleCondensed.toString() + web_url); // 刷新
+                            return true;
+                        }
+                    }
                     return false;
             }
 

@@ -15,7 +15,6 @@ import java.util.List;
 
 public class AppSettingActivity extends AppCompatActivity {
 
-    private TextView textView;
     private ArrayAdapter<ApiURLConfig> adapterArr;
     private Spinner spinner;
     private AppSettingManager appSettingManager;
@@ -36,7 +35,6 @@ public class AppSettingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mToolbar.setNavigationOnClickListener(v -> AppSettingActivity.this.finish());
-        textView = this.findViewById(R.id.third_api);
 
         List<ApiURLConfig> urlConfigs = getConfig();
         if (null != urlConfigs) {
