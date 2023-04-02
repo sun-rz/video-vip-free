@@ -1,10 +1,7 @@
 package com.video.vip.player.fragment;
 
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -77,7 +74,9 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     private ImageView mMoreImageView;
     private PopupMenu mPopupMenu;
 
+    private AppSettingManager appSettingManager;
     private MenuItem chooseApi;
+    List<ApiURLConfig> configList;
 
     /**
      * 用于方便打印测试
@@ -150,6 +149,24 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                         //退出全屏时会回调onHideCustomView()方法
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                         super.onHideCustomView();
+                    }
+
+                    @Override
+                    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                        result.cancel();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+                        result.cancel();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+                        result.cancel();
+                        return true;
                     }
 
                 }) //WebChromeClient
@@ -327,6 +344,24 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
             //退出全屏时会回调onHideCustomView()方法
             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             super.onHideCustomView();
+        }
+
+        @Override
+        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+            result.cancel();
+            return true;
+        }
+
+        @Override
+        public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+            result.cancel();
+            return true;
+        }
+
+        @Override
+        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+            result.cancel();
+            return true;
         }
     };
     /**
@@ -576,8 +611,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
             Menu menu = mPopupMenu.getMenu();
             MenuItem item = menu.getItem(menu.size() - 1);
             SubMenu subItem = item.getSubMenu();
-            AppSettingManager appSettingManager = new AppSettingManager(getContext());
-            List<ApiURLConfig> configList = appSettingManager.query();
+            configList = getConfig();
             for (int i = 0; i < configList.size(); i++) {
                 ApiURLConfig apiURLConfig = configList.get(i);
                 MenuItem menuItem = subItem.add(R.id.choose_api, apiURLConfig.getId(), i, apiURLConfig.getTitle());
@@ -617,7 +651,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 
                 case R.id.copy:
                     if (mAgentWeb != null) {
-                        toCopy(AgentWebFragment.this.getContext(), mAgentWeb.getWebCreator().getWebView().getUrl());
+                        toCopy(getContext(), mAgentWeb.getWebCreator().getWebView().getUrl());
                     }
                     return true;
                 case R.id.default_browser:
@@ -657,7 +691,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                             Bundle arguments = getArguments();
                             String web_url = arguments.getString(AgentWebFragment.WEB_URL_KEY);
                             mAgentWeb.getUrlLoader().loadUrl(titleCondensed.toString() + web_url); // 刷新
-                            return true;
+                            return saveConfig();
                         }
                     }
                     return false;
@@ -873,4 +907,21 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
         return list;
     }
 
+    private List<ApiURLConfig> getConfig() {
+        appSettingManager = new AppSettingManager(getContext());
+        return appSettingManager.query();
+    }
+
+    private boolean saveConfig() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("is_default", 1);
+        ContentValues contentValues1 = new ContentValues();
+        contentValues1.put("is_default", 0);
+        int itemId = chooseApi.getItemId();
+        appSettingManager.update(contentValues, "id = ?", new String[]{itemId + ""});
+        appSettingManager.update(contentValues1, "id <> ?", new String[]{itemId + ""});
+
+        configList.stream().filter(item -> item.getId() == itemId).findFirst().ifPresent(apiURLConfig -> VideoPlayerActivity.defaultApi = apiURLConfig);
+        return true;
+    }
 }

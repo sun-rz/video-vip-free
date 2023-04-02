@@ -20,6 +20,7 @@ import com.flyingpigeon.library.annotations.thread.MainThread;
 import com.just.agentweb.AgentWebConfig;
 import com.video.vip.player.R;
 import com.video.vip.player.api.Api;
+import com.video.vip.player.app.App;
 import com.video.vip.player.common.GuideItemEntity;
 import com.video.vip.player.db.DBOpenHelper;
 import com.video.vip.player.db.GuideItemManager;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int FLAG_GUIDE_DICTIONARY_IPC = FLAG_GUIDE_DICTIONARY_COMMON_FILE_DOWNLOAD << 1;
     public static final int FLAG_GUIDE_DICTIONARY_WEBRTC = FLAG_GUIDE_DICTIONARY_IPC << 1;
     public static final int FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH = FLAG_GUIDE_DICTIONARY_WEBRTC << 1;
+    public static final int FLAG_GUIDE_SETTINGS_APPLICATIONS = FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH << 1;
 
     public static List<GuideItemEntity> datas =new ArrayList<>();
 
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         //查询列表
         GuideItemManager guideItemManager = new GuideItemManager(getApplicationContext());
         datas = guideItemManager.query();
+        //datas.add( new GuideItemEntity("设置", FLAG_GUIDE_SETTINGS_APPLICATIONS, -1, R.drawable.ic_settings_applications, "https://www.newfii.com/"));
     }
 
     private Api mApi = new Api() {
@@ -143,6 +146,10 @@ public class MainActivity extends AppCompatActivity {
                         .putExtra(CommonActivity.TYPE_KEY, FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH)
                         .putExtra(AgentWebFragment.WEB_URL_KEY, guideItemEntity.getUrl())
                 );
+                break;
+
+            case FLAG_GUIDE_SETTINGS_APPLICATIONS:
+                startActivity( new Intent(this, AppSettingActivity.class));
                 break;
 
             /* Activity agentWeb */
