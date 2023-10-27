@@ -150,25 +150,6 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                         super.onHideCustomView();
                     }
-
-                    @Override
-                    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                        result.cancel();
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-                        result.cancel();
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-                        result.cancel();
-                        return true;
-                    }
-
                 }) //WebChromeClient
                 .setPermissionInterceptor(mPermissionInterceptor) //权限拦截 2.0.0 加入。
                 .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK) //严格模式 Android 4.2.2 以下会放弃注入对象 ，使用AgentWebView没影响。
@@ -344,24 +325,6 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
             //退出全屏时会回调onHideCustomView()方法
             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             super.onHideCustomView();
-        }
-
-        @Override
-        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-            result.cancel();
-            return true;
-        }
-
-        @Override
-        public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-            result.cancel();
-            return true;
-        }
-
-        @Override
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-            result.cancel();
-            return true;
         }
     };
     /**

@@ -2,10 +2,17 @@
     <string name="app_name" translatable="false">vip浏览器</string>
     <string name="jx" translatable="false">解析</string>
     <string name="setting">设置</string>
-    <string name="save">保存</string>
+    <string name="save">保存接口配置</string>
+    <string name="save_config">保存配置</string>
+    <string name="read_config">读取配置</string>
     <string name="api_config">请输入接口配置信息</string>
+    <string name="home_config">请输入主界面配置信息</string>
     <string name="jk">接口：</string>
     <string name="video_play">视频播放</string>
     <string name="default_api_text">默认接口：</string>
     <string name="desc">本软件仅供学习和研究，禁止用于商业用途！</string>
+
+    <string name="music_volume">媒体音量</string>
+    <string name="phone_volume">音量调节</string>
+
 </resources>

@@ -20,7 +20,6 @@ import com.flyingpigeon.library.annotations.thread.MainThread;
 import com.just.agentweb.AgentWebConfig;
 import com.video.vip.player.R;
 import com.video.vip.player.api.Api;
-import com.video.vip.player.app.App;
 import com.video.vip.player.common.GuideItemEntity;
 import com.video.vip.player.db.DBOpenHelper;
 import com.video.vip.player.db.GuideItemManager;
