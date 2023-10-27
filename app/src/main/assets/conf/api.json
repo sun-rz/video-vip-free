@@ -1,8 +1,13 @@
 [
   {
-    "code": "http://jx.aidouer.net/?url=",
+    "code": "https://jx.xyflv.cc/?url=",
     "title": "视频云解析【全网解析】",
     "is_default": 1
+  },
+  {
+    "code": "https://jx.jsonplayer.com/player/?url=",
+    "title": "json解析",
+    "is_default": 0
   },
   {
     "code": "https://jx.quankan.app/?url=",
@@ -10,8 +15,8 @@
     "is_default": 0
   },
   {
-    "code": "https://jie.taotaosha.top/?url=",
-    "title": "奈落影视",
+    "code": "https://player.mrgaocloud.com/player/?url=",
+    "title": "RDF解析",
     "is_default": 0
   },
   {
@@ -20,8 +25,8 @@
     "is_default": 0
   },
   {
-    "code": "https://okjx.cc/?url=",
-    "title": "OK解析",
+    "code": "http://api.apii.top/?v=",
+    "title": "①全能VIP解析通道",
     "is_default": 0
   },
   {
@@ -30,13 +35,8 @@
     "is_default": 0
   },
   {
-    "code": "https://jx.4kdv.com/?url=",
-    "title": "4K解析",
-    "is_default": 0
-  },
-  {
-    "code": "https://jx.4kdv.com/?url=",
-    "title": "4K解析1",
+    "code": "http://www.wpsseo.cn/line.php?n=6&url=",
+    "title": "通道6",
     "is_default": 0
   }
 ]

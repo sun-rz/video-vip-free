@@ -30,6 +30,7 @@ import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.*;
 import com.video.vip.player.R;
 import com.video.vip.player.activity.AppSettingActivity;
+import com.video.vip.player.activity.MainActivity;
 import com.video.vip.player.activity.VideoPlayerActivity;
 import com.video.vip.player.app.App;
 import com.video.vip.player.bean.ApiURLConfig;
@@ -76,7 +77,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 
     private AppSettingManager appSettingManager;
     private MenuItem chooseApi;
-    List<ApiURLConfig> configList;
+    public static List<ApiURLConfig> configList;
 
     /**
      * 用于方便打印测试
@@ -568,13 +569,18 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
      * @param view 菜单依附在该View下面
      */
     private void showPoPup(View view) {
-        if (mPopupMenu == null) {
-            mPopupMenu = new PopupMenu(this.getActivity(), view);
-            mPopupMenu.inflate(R.menu.toolbar_menu);
+        if (mPopupMenu == null || null == configList) {
+            if (null == mPopupMenu) {
+                mPopupMenu = new PopupMenu(this.getActivity(), view);
+                mPopupMenu.inflate(R.menu.toolbar_menu);
+            }
             Menu menu = mPopupMenu.getMenu();
             MenuItem item = menu.getItem(menu.size() - 1);
             SubMenu subItem = item.getSubMenu();
-            configList = getConfig();
+            subItem.clear();
+            if (null == configList) {
+                configList = getConfig();
+            }
             for (int i = 0; i < configList.size(); i++) {
                 ApiURLConfig apiURLConfig = configList.get(i);
                 MenuItem menuItem = subItem.add(R.id.choose_api, apiURLConfig.getId(), i, apiURLConfig.getTitle());
@@ -883,6 +889,12 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
         int itemId = chooseApi.getItemId();
         appSettingManager.update(contentValues, "id = ?", new String[]{itemId + ""});
         appSettingManager.update(contentValues1, "id <> ?", new String[]{itemId + ""});
+
+        MainActivity.default_api = chooseApi.getTitleCondensed().toString();
+        Context context = getContext();
+        SharedPreferences.Editor editor = context.getSharedPreferences("WebViewChromiumPrefs", Context.MODE_PRIVATE).edit();
+        editor.putString("default_api", MainActivity.default_api);
+        editor.apply();
 
         configList.stream().filter(item -> item.getId() == itemId).findFirst().ifPresent(apiURLConfig -> VideoPlayerActivity.defaultApi = apiURLConfig);
         return true;

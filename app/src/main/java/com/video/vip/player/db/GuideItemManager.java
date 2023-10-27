@@ -50,7 +50,7 @@ public class GuideItemManager extends DBManager<GuideItemEntity> {
                 new GuideItemEntity("优酷视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.yksp, "https://youku.com/"),
                 new GuideItemEntity("PPTV", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.pptv, "https://www.pptv.com/"),
                 new GuideItemEntity("搜狐视频", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH, R.mipmap.shsp, "https://tv.sohu.com/"),
-                new GuideItemEntity("奈落影视", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH, 1, R.mipmap.nl_logo, "https://www.newfii.com/"),
+                //new GuideItemEntity("奈落影视", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH, 1, R.mipmap.nl_logo, "https://www.newfii.com/"),
                // new GuideItemEntity("BL影院", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH, 1, R.mipmap.bljiex, "https://svip.bljiex.cc/mov/"),
                 new GuideItemEntity("百度", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH, R.mipmap.baidu, "https://www.baidu.com/"),
                 new GuideItemEntity("必应", FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH, R.mipmap.by, "https://cn.bing.com/"),

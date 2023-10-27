@@ -3,6 +3,7 @@ package com.video.vip.player.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,14 +22,19 @@ import com.just.agentweb.AgentWebConfig;
 import com.video.vip.player.R;
 import com.video.vip.player.api.Api;
 import com.video.vip.player.common.GuideItemEntity;
+import com.video.vip.player.db.AppSettingManager;
 import com.video.vip.player.db.DBOpenHelper;
 import com.video.vip.player.db.GuideItemManager;
 import com.video.vip.player.fragment.AgentWebFragment;
 import com.video.vip.player.widget.MyGridView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.video.vip.player.sonic.SonicJavaScriptInterface.PARAM_CLICK_TIME;
 
@@ -37,6 +43,7 @@ import static com.video.vip.player.sonic.SonicJavaScriptInterface.PARAM_CLICK_TI
  */
 public class MainActivity extends AppCompatActivity {
 
+    public static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(1), new ThreadPoolExecutor.DiscardOldestPolicy());
 
     private ListView mListView;
 
@@ -69,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH = FLAG_GUIDE_DICTIONARY_WEBRTC << 1;
     public static final int FLAG_GUIDE_SETTINGS_APPLICATIONS = FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH << 1;
 
-    public static List<GuideItemEntity> datas =new ArrayList<>();
+    public static List<GuideItemEntity> datas = new ArrayList<>();
+    public static MyGridViewAdapter myGridViewAdapter;
+    public static String default_api = "";
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -87,15 +96,13 @@ public class MainActivity extends AppCompatActivity {
             // Enable the Up button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mToolbar.setNavigationOnClickListener(v -> {
-            MainActivity.this.finish();
-        });
+        mToolbar.setNavigationOnClickListener(v -> MainActivity.this.finish());
 
         initApp();
 
         MyGridView gridView = this.findViewById(R.id.main_gridview);
-
-        gridView.setAdapter(new MyGridViewAdapter(this));
+        myGridViewAdapter = new MyGridViewAdapter(this);
+        gridView.setAdapter(myGridViewAdapter);
 
         gridView.setOnItemClickListener((adapterView, view, position, id) -> doClick(position));
 
@@ -110,13 +117,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initApp() {
+
         //初始化数据库
         new DBOpenHelper(getApplicationContext());
 
-        //查询列表
         GuideItemManager guideItemManager = new GuideItemManager(getApplicationContext());
+        AppSettingManager appSettingManager = new AppSettingManager(getApplicationContext());
+
+        SharedPreferences sharedPreferences = getSharedPreferences("WebViewChromiumPrefs", MODE_PRIVATE);
+        default_api = sharedPreferences.getString("default_api", "");
+
+        //查询列表
         datas = guideItemManager.query();
-        //datas.add( new GuideItemEntity("设置", FLAG_GUIDE_SETTINGS_APPLICATIONS, -1, R.drawable.ic_settings_applications, "https://www.newfii.com/"));
+
+        threadPoolExecutor.execute(() -> {
+            try {
+                AppSettingActivity.updateApi(appSettingManager);
+                AppSettingActivity.updateHomeConf(guideItemManager);
+
+                runOnUiThread(() -> {
+                    Toast toast = Toast.makeText(getApplicationContext(), "更新接口配置完成", Toast.LENGTH_SHORT);
+                    //显示toast信息
+                    toast.show();
+
+                    //刷新数据
+                    datas = guideItemManager.query();
+                    myGridViewAdapter.notifyDataSetChanged();
+                });
+            } catch (IOException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "获取接口信息失败：" + e.getMessage(), Toast.LENGTH_SHORT);
+                //显示toast信息
+                toast.show();
+            }
+        });
     }
 
     private Api mApi = new Api() {
@@ -148,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case FLAG_GUIDE_SETTINGS_APPLICATIONS:
-                startActivity( new Intent(this, AppSettingActivity.class));
+                startActivity(new Intent(this, AppSettingActivity.class));
                 break;
 
             /* Activity agentWeb */
@@ -242,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        threadPoolExecutor.shutdown();
         ServiceManager.getInstance().unpublish(mApi);
         File dir = getApplicationContext().getCacheDir();
         if (dir != null && dir.isDirectory()) {
