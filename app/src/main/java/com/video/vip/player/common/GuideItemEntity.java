@@ -41,7 +41,6 @@ public class GuideItemEntity implements Serializable {
 	}
 
 	public GuideItemEntity(String guideTitle, int guideDictionary, int extra, int image, String url) {
-		this.id = id;
 		this.guideTitle = guideTitle;
 		this.guideDictionary = guideDictionary;
 		this.extra = extra;

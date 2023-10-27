@@ -12,7 +12,7 @@ public class ApiURLConfig implements Serializable {
     public ApiURLConfig() {
     }
 
-    public ApiURLConfig( String code, String title, int is_default) {
+    public ApiURLConfig(String code, String title, int is_default) {
         this.code = code;
         this.title = title;
         this.is_default = is_default;
@@ -56,6 +56,7 @@ public class ApiURLConfig implements Serializable {
     public void setIs_default(int is_default) {
         this.is_default = is_default;
     }
+
     @Override
     public String toString() {
         return title;

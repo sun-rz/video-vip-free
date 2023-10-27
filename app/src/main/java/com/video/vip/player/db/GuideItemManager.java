@@ -85,9 +85,8 @@ public class GuideItemManager extends DBManager<GuideItemEntity> {
     }
 
 
-    private long add(GuideItemEntity guideItemEntity) {
+    public long add(GuideItemEntity guideItemEntity) {
         ContentValues values = new ContentValues();
-        //values.put(ID, guideItemEntity.getId());
         values.put(GUIDETITLE, guideItemEntity.getGuideTitle());
         values.put(GUIDEDICTIONARY, guideItemEntity.getGuideDictionary());
         values.put(EXTRA, guideItemEntity.getExtra());

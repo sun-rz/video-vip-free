@@ -79,17 +79,16 @@ public class DBManager<T> {
     /**
      * 删除数据
      *
-     * @param values
      * @param whereClause
      * @param whereArgs
      * @return
      */
-    public int delete(ContentValues values, String whereClause, String[] whereArgs) {
+    public int delete(String whereClause, String[] whereArgs) {
         SQLiteDatabase db = getDatabase();
         return db.delete(TABLE_NAME, whereClause, whereArgs);
     }
 
-    public int delete(ContentValues values, String whereClause, String[] whereArgs, SQLiteDatabase db) {
+    public int delete(String whereClause, String[] whereArgs, SQLiteDatabase db) {
         return db.delete(TABLE_NAME, whereClause, whereArgs);
     }
 

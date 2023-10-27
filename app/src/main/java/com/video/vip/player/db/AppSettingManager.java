@@ -4,7 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.google.gson.Gson;
 import com.video.vip.player.bean.ApiURLConfig;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -14,9 +21,11 @@ import com.video.vip.player.bean.ApiURLConfig;
  */
 
 public class AppSettingManager extends DBManager<ApiURLConfig> {
+    Context mContext;
 
     public AppSettingManager(Context context) {
         super(context, tableName);
+        this.mContext = context;
     }
 
     private static final String tableName = "api_url_config";
@@ -35,36 +44,42 @@ public class AppSettingManager extends DBManager<ApiURLConfig> {
     @Override
     public void initData(SQLiteDatabase db) {
 
-        ApiURLConfig[] apiURLConfigs = {
-                new ApiURLConfig("http://jx.aidouer.net/?url=", "视频云解析【全网解析】", 1),
-                new ApiURLConfig("https://jx.quankan.app/?url=", "麒麟播放器", 0),
-                new ApiURLConfig("https://jx.m3u8.tv/jiexi/?url=", "M3U8.TV无广告JSON解析", 0),
-                new ApiURLConfig("https://dmjx.m3u8.tv/?url=", "M3U8.TV无广告弹幕解析", 0),
-                new ApiURLConfig("https://im1907.top/?jx=", "M1907云加速在线播放器", 0),
-                new ApiURLConfig("https://jx.xmflv.com/?url=", "虾米解析", 0),
-                new ApiURLConfig("http://api.apii.top/?v=", "全网VIP会员视频解析", 0),
-                new ApiURLConfig("https://jy.we-vip.com:2053/?url=", "PlayerJy解析", 0),
-                new ApiURLConfig("https://svip.bljiex.cc/?v=", "BL解析", 0),
-                //new ApiURLConfig("http://jiexi44.qmbo.cn/jiexi/?url=", "云解析资源网", 0),
-                //new ApiURLConfig("https://www.nxflv.com/?url=", "诺讯智能解析系统", 0),
-                new ApiURLConfig("https://jx.iztyy.com/svip/?url=", "猪蹄解析", 0),
-               // new ApiURLConfig("https://video.isyour.love/player/getplayer?&adadress=https://jx.cjw123.com/ad.html?&url=", "邦宁云播播放器", 0),
-                new ApiURLConfig("https://okjx.cc/?url=", "OK解析", 0),
-                new ApiURLConfig("https://bd.jx.cn/?url=", "冰豆解析", 0),
-                new ApiURLConfig("https://jx.4kdv.com/?url=", "4K解析", 0)
-        };
-        for (ApiURLConfig apiURLConfig : apiURLConfigs) {
-            add(apiURLConfig, db);
+        InputStream is = null;
+        try {
+            is = mContext.getAssets().open("conf/api.json");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            StringBuilder lines = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = new String(line.getBytes(), StandardCharsets.UTF_8);
+                lines.append(line);
+            }
+            reader.close();
+            Gson gson = new Gson();
+            ApiURLConfig[] apiURLConfigs = gson.fromJson(lines.toString(), ApiURLConfig[].class);
+            if (null != apiURLConfigs) {
+                for (ApiURLConfig apiURLConfig : apiURLConfigs) {
+                    add(apiURLConfig, db);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != is) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    private long add(ApiURLConfig apiURLConfig) {
+    public long add(ApiURLConfig apiURLConfig) {
         ContentValues values = new ContentValues();
-        //values.put(ID, apiURLConfig.getId());
         values.put(CODE, apiURLConfig.getCode());
         values.put(TITLE, apiURLConfig.getTitle());
         values.put(IS_DEFAULT, apiURLConfig.getIs_default());
-
         return insert(values);
     }
 
