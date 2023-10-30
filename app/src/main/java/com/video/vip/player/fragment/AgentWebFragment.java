@@ -569,6 +569,9 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
      * @param view 菜单依附在该View下面
      */
     private void showPoPup(View view) {
+        if (null == appSettingManager) {
+            appSettingManager = new AppSettingManager(getContext());
+        }
         if (mPopupMenu == null || null == configList) {
             if (null == mPopupMenu) {
                 mPopupMenu = new PopupMenu(this.getActivity(), view);
@@ -590,7 +593,30 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
             mPopupMenu.setOnMenuItemClickListener(mOnMenuItemClickListener);
         }
 
-        if (chooseApi != null) {
+        if (null == chooseApi) {
+            Menu menu = mPopupMenu.getMenu();
+            MenuItem menuItem = menu.getItem(menu.size() - 1);
+            SubMenu subItem = menuItem.getSubMenu();
+            for (int i = 0; i < subItem.size(); i++) {
+                MenuItem item = subItem.getItem(i);
+                boolean findItem = item.getTitleCondensed().toString().equals(MainActivity.default_api);
+                if (findItem) {
+                    chooseApi = item;
+                }
+                item.setIcon(findItem ? R.drawable.choose_api_checked : R.drawable.choose_api_unchacked);
+            }
+
+            if ("".equals(MainActivity.default_api)) {
+                MenuItem item = subItem.getItem(0);
+                item.setIcon(R.drawable.choose_api_checked);
+                chooseApi = item;
+                MainActivity.default_api = item.getTitleCondensed().toString();
+
+                SharedPreferences.Editor editor = getContext().getSharedPreferences("WebViewChromiumPrefs", Context.MODE_PRIVATE).edit();
+                editor.putString("default_api", MainActivity.default_api);
+                editor.apply();
+            }
+        } else {
             Menu menu = mPopupMenu.getMenu();
             MenuItem menuItem = menu.getItem(menu.size() - 1);
             SubMenu subItem = menuItem.getSubMenu();
@@ -877,7 +903,6 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     }
 
     private List<ApiURLConfig> getConfig() {
-        appSettingManager = new AppSettingManager(getContext());
         return appSettingManager.query();
     }
 
@@ -891,8 +916,8 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
         appSettingManager.update(contentValues1, "id <> ?", new String[]{itemId + ""});
 
         MainActivity.default_api = chooseApi.getTitleCondensed().toString();
-        Context context = getContext();
-        SharedPreferences.Editor editor = context.getSharedPreferences("WebViewChromiumPrefs", Context.MODE_PRIVATE).edit();
+
+        SharedPreferences.Editor editor = getContext().getSharedPreferences("WebViewChromiumPrefs", Context.MODE_PRIVATE).edit();
         editor.putString("default_api", MainActivity.default_api);
         editor.apply();
 

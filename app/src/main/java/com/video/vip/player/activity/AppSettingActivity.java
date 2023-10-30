@@ -122,11 +122,13 @@ public class AppSettingActivity extends AppCompatActivity {
 
     public static void updateApi(AppSettingManager appSettingManager) throws IOException {
         ApiURLConfig[] apiURLConfigs = readConf(APIURI, ApiURLConfig[].class);
+
+        appSettingManager.delete("id > ?", new String[]{"0"});
+
         if (apiURLConfigs.length == 0) {
             return;
         }
 
-        appSettingManager.delete("id > ?", new String[]{"0"});
         for (ApiURLConfig apiURLConfig : apiURLConfigs) {
             if (!"".equals(default_api)) {
                 if (apiURLConfig.getCode().equals(default_api)) {
@@ -141,10 +143,13 @@ public class AppSettingActivity extends AppCompatActivity {
 
     public static void updateHomeConf(GuideItemManager guideItemManager) throws IOException {
         GuideItemEntity[] guideItemEntities = readConf(GUIDEURI, GuideItemEntity[].class);
+
+        guideItemManager.delete("extra = ?", new String[]{"1"});
+
         if (guideItemEntities.length == 0) {
             return;
         }
-        guideItemManager.delete("extra = ?", new String[]{"1"});
+
         for (GuideItemEntity guideItemEntity : guideItemEntities) {
             guideItemEntity.setImage(R.mipmap.sp);
             guideItemEntity.setGuideDictionary(FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH);
