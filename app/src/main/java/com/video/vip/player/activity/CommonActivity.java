@@ -46,19 +46,17 @@ public class CommonActivity extends AppCompatActivity {
 
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         Bundle mBundle = null;
-
+        String url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
 
         switch (key) {
             /*SmartRefresh 下拉刷新*/
             case FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH:
-                String url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
                 ft.add(R.id.container_framelayout, mAgentWebFragment = SmartRefreshWebFragment.getInstance(mBundle = new Bundle()), SmartRefreshWebFragment.class.getName());
                 mBundle.putString(AgentWebFragment.URL_KEY, url);
                 mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, false);
                 mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, true);
                 break;
             case FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH:
-                url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
                 ft.add(R.id.container_framelayout, mAgentWebFragment = SmartRefreshWebFragment.getInstance(mBundle = new Bundle()), SmartRefreshWebFragment.class.getName());
                 mBundle.putString(AgentWebFragment.URL_KEY, url);
                 mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, true);
@@ -72,7 +70,7 @@ public class CommonActivity extends AppCompatActivity {
             /*下载文件*/
             case FLAG_GUIDE_DICTIONARY_FILE_DOWNLOAD:
                 ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
-                mBundle.putString(AgentWebFragment.URL_KEY, "http://android.myapp.com/");
+                mBundle.putString(AgentWebFragment.URL_KEY, url);
                 break;
             /*input标签上传文件*/
             case FLAG_GUIDE_DICTIONARY_INPUT_TAG_PROBLEM:

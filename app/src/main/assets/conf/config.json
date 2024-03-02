@@ -1,0 +1,99 @@
+{
+  "api": [
+    {
+      "id": 1,
+      "code": "https://jx.xyflv.cc/?url=",
+      "title": "视频云解析【全网解析】",
+      "is_default": 1
+    },
+    {
+      "id": 2,
+      "code": "https://jx.jsonplayer.com/player/?url=",
+      "title": "json解析",
+      "is_default": 0
+    },
+    {
+      "id": 3,
+      "code": "https://jx.quankan.app/?url=",
+      "title": "麒麟播放器",
+      "is_default": 0
+    },
+    {
+      "id": 4,
+      "code": "https://player.mrgaocloud.com/player/?url=",
+      "title": "RDF解析",
+      "is_default": 0
+    },
+    {
+      "id": 5,
+      "code": "https://jx.xmflv.com/?url=",
+      "title": "虾米解析",
+      "is_default": 0
+    },
+    {
+      "id": 6,
+      "code": "http://api.apii.top/?v=",
+      "title": "①全能VIP解析通道",
+      "is_default": 0
+    },
+    {
+      "id": 7,
+      "code": "https://bd.jx.cn/?url=",
+      "title": "冰豆解析",
+      "is_default": 0
+    },
+    {
+      "id": 8,
+      "code": "http://www.wpsseo.cn/line.php?n=6&url=",
+      "title": "通道6",
+      "is_default": 0
+    }
+  ],
+  "sites": [
+    {
+      "type": 2,
+      "guideTitle": "MyFreeMP3",
+      "url": "https://tools.liumingye.cn/music/#/"
+    },
+    {
+      "type": 1,
+      "guideTitle": "奈落影视",
+      "url": "https://www.newfii.com/"
+    },
+    {
+      "type": 1,
+      "guideTitle": "奇优影院",
+      "url": "http://www.2dye.com/"
+    },
+    {
+      "type": 1,
+      "guideTitle": "伍阔影视",
+      "url": "http://www.wukuo.com/"
+    },
+    {
+      "type": 1,
+      "guideTitle": "BT影院",
+      "url": "https://www.btyy.cc/"
+    },
+    {
+      "type": 1,
+      "guideTitle": "神马影院",
+      "url": "https://www.xzpfbyy.com/"
+    },
+    {
+      "type": 1,
+      "guideTitle": "西瓜影院",
+      "url": "https://kmwzkj.com/"
+    },
+    {
+      "type": 1,
+      "guideTitle": "BL影院",
+      "url": "https://svip.bljiex.cc/mov/"
+    },
+    {
+      "type": 1,
+      "guideTitle": "剧集屋",
+      "url": "https://jjwu.org/"
+    }
+  ]
+}

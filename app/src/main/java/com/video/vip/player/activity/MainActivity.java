@@ -21,10 +21,8 @@ import com.flyingpigeon.library.annotations.thread.MainThread;
 import com.just.agentweb.AgentWebConfig;
 import com.video.vip.player.R;
 import com.video.vip.player.api.Api;
+import com.video.vip.player.bean.ConfigInfo;
 import com.video.vip.player.common.GuideItemEntity;
-import com.video.vip.player.db.AppSettingManager;
-import com.video.vip.player.db.DBOpenHelper;
-import com.video.vip.player.db.GuideItemManager;
 import com.video.vip.player.fragment.AgentWebFragment;
 import com.video.vip.player.widget.MyGridView;
 
@@ -117,6 +115,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initApp() {
+        SharedPreferences sharedPreferences = getSharedPreferences("WebViewChromiumPrefs", MODE_PRIVATE);
+        default_api = sharedPreferences.getString("default_api", "");
+
+        threadPoolExecutor.execute(() -> {
+            try {
+                ConfigInfo configInfo = AppSettingActivity.getConfigInfo();
+                datas = configInfo.getSites();
+                runOnUiThread(() -> {
+                    Toast toast = Toast.makeText(getApplicationContext(), "更新接口配置完成", Toast.LENGTH_SHORT);
+                    //显示toast信息
+                    toast.show();
+
+                    //刷新首页数据
+                    myGridViewAdapter.notifyDataSetChanged();
+                });
+
+                AgentWebFragment.configList = configInfo.getApi();
+
+            } catch (IOException e) {
+                runOnUiThread(() -> {
+                    Toast toast = Toast.makeText(getApplicationContext(), "获取接口信息失败：请检查网络是否正常", Toast.LENGTH_SHORT);
+                    //显示toast信息
+                    toast.show();
+                });
+            }
+        });
+    }
+/*
+    private void initApp() {
 
         //初始化数据库
         new DBOpenHelper(getApplicationContext());
@@ -150,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
             }
         });
-    }
+    }*/
 
     private Api mApi = new Api() {
 
@@ -195,7 +222,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case FLAG_GUIDE_DICTIONARY_FILE_DOWNLOAD:
                 startActivity(new Intent(this, CommonActivity.class)
-                        .putExtra(CommonActivity.TYPE_KEY, FLAG_GUIDE_DICTIONARY_FILE_DOWNLOAD));
+                        .putExtra(CommonActivity.TYPE_KEY, FLAG_GUIDE_DICTIONARY_FILE_DOWNLOAD)
+                        .putExtra(AgentWebFragment.WEB_URL_KEY, guideItemEntity.getUrl())
+                );
                 break;
             case FLAG_GUIDE_DICTIONARY_WEBRTC:
                 startActivity(new Intent(this, CommonActivity.class)

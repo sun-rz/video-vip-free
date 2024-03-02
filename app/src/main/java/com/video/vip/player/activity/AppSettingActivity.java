@@ -8,8 +8,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.gson.Gson;
 import com.video.vip.player.R;
 import com.video.vip.player.bean.ApiURLConfig;
+import com.video.vip.player.bean.ConfigInfo;
 import com.video.vip.player.common.GuideItemEntity;
-import com.video.vip.player.db.AppSettingManager;
 import com.video.vip.player.db.GuideItemManager;
 import com.video.vip.player.fragment.AgentWebFragment;
 
@@ -19,18 +19,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import static com.video.vip.player.activity.MainActivity.FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH;
-import static com.video.vip.player.activity.MainActivity.default_api;
+import static com.video.vip.player.activity.MainActivity.*;
 
 
 public class AppSettingActivity extends AppCompatActivity {
 
     private Button buttonReadApi;
 
-    public static final String APIURI = "https://gitee.com/sunrz95/video-vip-free/raw/master/conf/api.json";
-    public static final String GUIDEURI = "https://gitee.com/sunrz95/video-vip-free/raw/master/conf/guide.json";
-    //private static final String REGX = ".*<script type=\"application/json\" data-target=\"react-app\\.embeddedData\">(.*)</script>.*";
+    public static final String CONFIG_URL = "https://gitee.com/sunrz95/video-vip-free/raw/master/config.json";
 
     private static boolean LOADING = false;
 
@@ -48,8 +48,6 @@ public class AppSettingActivity extends AppCompatActivity {
         }
         mToolbar.setNavigationOnClickListener(v -> AppSettingActivity.this.finish());
 
-        AppSettingManager appSettingManager = new AppSettingManager(getApplicationContext());
-        GuideItemManager guideItemManager = new GuideItemManager(getApplicationContext());
 
         LOADING = false;
 
@@ -66,8 +64,7 @@ public class AppSettingActivity extends AppCompatActivity {
 
             MainActivity.threadPoolExecutor.execute(() -> {
                 try {
-                    updateApi(appSettingManager);
-                    updateHomeConf(guideItemManager);
+                    ConfigInfo configInfo = getConfigInfo();
 
                     runOnUiThread(() -> {
                         Toast toast = Toast.makeText(getApplicationContext(), "更新接口配置完成", Toast.LENGTH_SHORT);
@@ -75,14 +72,15 @@ public class AppSettingActivity extends AppCompatActivity {
                         toast.show();
 
                         //刷新数据
-                        AgentWebFragment.configList = null;
-
-                        MainActivity.datas = guideItemManager.query();
+                        MainActivity.datas = configInfo.getSites();
                         MainActivity.myGridViewAdapter.notifyDataSetChanged();
+
+                        AgentWebFragment.configList = configInfo.getApi();
+
                     });
                 } catch (IOException e) {
                     runOnUiThread(() -> {
-                        Toast toast = Toast.makeText(getApplicationContext(), "获取接口信息失败：" + e.getMessage(), Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), "获取接口信息失败：请检查网络是否正常", Toast.LENGTH_SHORT);
                         //显示toast信息
                         toast.show();
                     });
@@ -94,7 +92,16 @@ public class AppSettingActivity extends AppCompatActivity {
 
     }
 
-    private static <T> T readConf(String uri, Class<T> tClass) throws IOException {
+    /**
+     * 远程获取配置文件
+     *
+     * @param uri
+     * @param tClass
+     * @param <T>
+     * @return
+     * @throws IOException
+     */
+    private static <T> T requestConf(String uri, Class<T> tClass) throws IOException {
         URL url = new URL(uri);
         InputStream is = url.openStream();
         //设置编码,否则中文乱码
@@ -106,30 +113,25 @@ public class AppSettingActivity extends AppCompatActivity {
             lines.append(line);
         }
         reader.close();
-
-            /*String json = lines.toString().replaceAll(REGX, "$1");
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray jsonArray = jsonObject.getJSONObject("payload").getJSONObject("blob").getJSONArray("rawLines");
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                String str = jsonArray.getString(i);
-                sb.append(str);
-            }*/
         Gson gson = new Gson();
         return gson.fromJson(lines.toString(), tClass);
     }
 
-    public static void updateApi(AppSettingManager appSettingManager) throws IOException {
-        ApiURLConfig[] apiURLConfigs = readConf(APIURI, ApiURLConfig[].class);
+    /**
+     * 获取配置信息
+     *
+     * @throws IOException
+     */
+    public static ConfigInfo getConfigInfo() throws IOException {
+        ConfigInfo configInfo = requestConf(CONFIG_URL, ConfigInfo.class);
 
-        appSettingManager.delete("id > ?", new String[]{"0"});
+        /*appSettingManager.delete("id > ?", new String[]{"0"});
 
         if (apiURLConfigs.length == 0) {
             return;
-        }
+        }*/
 
-        for (ApiURLConfig apiURLConfig : apiURLConfigs) {
+        for (ApiURLConfig apiURLConfig : configInfo.getApi()) {
             if (!"".equals(default_api)) {
                 if (apiURLConfig.getCode().equals(default_api)) {
                     apiURLConfig.setIs_default(1);
@@ -137,24 +139,24 @@ public class AppSettingActivity extends AppCompatActivity {
                     apiURLConfig.setIs_default(0);
                 }
             }
-            appSettingManager.add(apiURLConfig);
-        }
-    }
-
-    public static void updateHomeConf(GuideItemManager guideItemManager) throws IOException {
-        GuideItemEntity[] guideItemEntities = readConf(GUIDEURI, GuideItemEntity[].class);
-
-        guideItemManager.delete("extra = ?", new String[]{"1"});
-
-        if (guideItemEntities.length == 0) {
-            return;
         }
 
-        for (GuideItemEntity guideItemEntity : guideItemEntities) {
-            guideItemEntity.setImage(R.mipmap.sp);
-            guideItemEntity.setGuideDictionary(FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH);
+        List<GuideItemEntity> defaultList = Arrays.asList(GuideItemManager.guideItemEntityList);
+        List<GuideItemEntity> list = new ArrayList<>(defaultList);
+        for (GuideItemEntity guideItemEntity : configInfo.getSites()) {
+            if (guideItemEntity.getType() == 2) {
+                guideItemEntity.setImage(R.mipmap.music);
+                guideItemEntity.setGuideDictionary(FLAG_GUIDE_DICTIONARY_FILE_DOWNLOAD);
+            } else {
+                guideItemEntity.setImage(R.mipmap.sp);
+                guideItemEntity.setGuideDictionary(FLAG_GUIDE_DICTIONARY_PULL_DOWN_REFRESH_SEARCH);
+            }
             guideItemEntity.setExtra(1);
-            guideItemManager.add(guideItemEntity);
+            list.add(guideItemEntity);
         }
+
+        configInfo.setSites(list);
+
+        return configInfo;
     }
 }

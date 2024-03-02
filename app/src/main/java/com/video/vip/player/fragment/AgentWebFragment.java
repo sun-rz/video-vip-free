@@ -1,6 +1,5 @@
 package com.video.vip.player.fragment;
 
-
 import android.content.*;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,6 +7,7 @@ import android.net.http.SslError;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -39,7 +39,6 @@ import com.video.vip.player.client.MiddlewareWebViewClient;
 import com.video.vip.player.common.CommonWebChromeClient;
 import com.video.vip.player.common.FragmentKeyDown;
 import com.video.vip.player.common.UIController;
-import com.video.vip.player.db.AppSettingManager;
 import com.video.vip.player.filechooser.FileCompressor;
 import com.video.vip.player.utils.FileUtils;
 import top.zibin.luban.Luban;
@@ -75,7 +74,6 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
     private ImageView mMoreImageView;
     private PopupMenu mPopupMenu;
 
-    private AppSettingManager appSettingManager;
     private MenuItem chooseApi;
     public static List<ApiURLConfig> configList;
 
@@ -244,12 +242,14 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
 
                             @Override
                             protected ResourceRequest createResourceRequest(String url) {
+                                String originalFilename = URLUtil.guessFileName(url, null, null);
                                 return DownloadImpl.getInstance(getContext())
                                         .url(url)
+                                        .target(new File(Environment.getExternalStorageDirectory() + "/download/" + originalFilename))//自定义路径需指定目录
                                         .quickProgress()
                                         .addHeader("", "")
                                         .setEnableIndicator(true)
-                                        .autoOpenIgnoreMD5()
+                                        //.autoOpenIgnoreMD5()   //下载完成后自动打开文件
                                         .setRetry(5)
                                         .setBlockMaxTime(100000L);
                             }
@@ -569,9 +569,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
      * @param view 菜单依附在该View下面
      */
     private void showPoPup(View view) {
-        if (null == appSettingManager) {
-            appSettingManager = new AppSettingManager(getContext());
-        }
+
         if (mPopupMenu == null || null == configList) {
             if (null == mPopupMenu) {
                 mPopupMenu = new PopupMenu(this.getActivity(), view);
@@ -582,7 +580,7 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
             SubMenu subItem = item.getSubMenu();
             subItem.clear();
             if (null == configList) {
-                configList = getConfig();
+                configList = new ArrayList<>();
             }
             for (int i = 0; i < configList.size(); i++) {
                 ApiURLConfig apiURLConfig = configList.get(i);
@@ -902,26 +900,14 @@ public class AgentWebFragment extends Fragment implements FragmentKeyDown, FileC
         return list;
     }
 
-    private List<ApiURLConfig> getConfig() {
-        return appSettingManager.query();
-    }
-
     private boolean saveConfig() {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("is_default", 1);
-        ContentValues contentValues1 = new ContentValues();
-        contentValues1.put("is_default", 0);
         int itemId = chooseApi.getItemId();
-        appSettingManager.update(contentValues, "id = ?", new String[]{itemId + ""});
-        appSettingManager.update(contentValues1, "id <> ?", new String[]{itemId + ""});
 
         MainActivity.default_api = chooseApi.getTitleCondensed().toString();
 
         SharedPreferences.Editor editor = getContext().getSharedPreferences("WebViewChromiumPrefs", Context.MODE_PRIVATE).edit();
         editor.putString("default_api", MainActivity.default_api);
         editor.apply();
-
-        configList.stream().filter(item -> item.getId() == itemId).findFirst().ifPresent(apiURLConfig -> VideoPlayerActivity.defaultApi = apiURLConfig);
         return true;
     }
 }

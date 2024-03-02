@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.video.vip.player.R;
-import com.video.vip.player.bean.ApiURLConfig;
-import com.video.vip.player.db.AppSettingManager;
 import com.video.vip.player.fragment.*;
 
 import java.util.regex.Matcher;
@@ -20,7 +18,6 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private FrameLayout mFrameLayout;
     private FragmentManager mFragmentManager;
     private AgentWebFragment mAgentWebFragment;
-    public static ApiURLConfig defaultApi;
 
     public VideoPlayerActivity() {
     }
@@ -30,14 +27,6 @@ public class VideoPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_common);
-
-        if (null == defaultApi) {
-            AppSettingManager appSettingManager = new AppSettingManager(getApplicationContext());
-            defaultApi = appSettingManager.queryByField("is_default = ?", new String[]{"1"});
-            if (defaultApi == null) {
-                defaultApi = appSettingManager.queryByField("is_default = ?", new String[]{"0"});
-            }
-        }
 
         mFrameLayout = this.findViewById(R.id.container_framelayout);
         mFragmentManager = this.getSupportFragmentManager();
@@ -54,7 +43,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
             ft.add(R.id.container_framelayout, mAgentWebFragment = AgentWebFragment.getInstance(mBundle = new Bundle()), AgentWebFragment.class.getName());
             String web_url = getIntent().getStringExtra(AgentWebFragment.WEB_URL_KEY);
             web_url = convertURL(web_url);
-            mBundle.putString(AgentWebFragment.URL_KEY, defaultApi.getCode() + web_url);
+            mBundle.putString(AgentWebFragment.URL_KEY, default_api + web_url);
             mBundle.putString(AgentWebFragment.WEB_URL_KEY, web_url);
             mBundle.putBoolean(AgentWebFragment.SHOW_SEARCH_KEY, false);
             mBundle.putBoolean(AgentWebFragment.SHOW_PLAYER_KEY, false);

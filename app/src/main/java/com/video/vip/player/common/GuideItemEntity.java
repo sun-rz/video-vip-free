@@ -25,91 +25,110 @@ import java.io.Serializable;
  */
 public class GuideItemEntity implements Serializable {
 
-	private int id;
-	private String guideTitle;
-	private int guideDictionary;
-	private int extra;
-	private int image;
-	private String url;
-	private String pc_url;
+    private int id;
+    private String guideTitle;
+    private int guideDictionary;
+    private int extra;
+    private int image;
+    private String url;
+    private String pc_url;
 
-	public GuideItemEntity(String guideTitle, int guideDictionary, int image,String url) {
-		this.guideTitle = guideTitle;
-		this.guideDictionary = guideDictionary;
-		this.image = image;
-		this.url = url;
-	}
+    /**
+     * 0:默认 1:网站  2:音乐
+     */
+    private int type = 0;
 
-	public GuideItemEntity(String guideTitle, int guideDictionary, int extra, int image, String url) {
-		this.guideTitle = guideTitle;
-		this.guideDictionary = guideDictionary;
-		this.extra = extra;
-		this.image = image;
-		this.url = url;
-	}
+    public GuideItemEntity(String guideTitle, int guideDictionary, int image) {
+        this.guideTitle = guideTitle;
+        this.guideDictionary = guideDictionary;
+        this.image = image;
+    }
 
-	public GuideItemEntity(int id, String guideTitle, int guideDictionary, int extra, int image, String url) {
-		this.id = id;
-		this.guideTitle = guideTitle;
-		this.guideDictionary = guideDictionary;
-		this.extra = extra;
-		this.image = image;
-		this.url = url;
-	}
+    public GuideItemEntity(String guideTitle, int guideDictionary, int image, String url) {
+        this.guideTitle = guideTitle;
+        this.guideDictionary = guideDictionary;
+        this.image = image;
+        this.url = url;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public GuideItemEntity(String guideTitle, int guideDictionary, int extra, int image, String url) {
+        this.guideTitle = guideTitle;
+        this.guideDictionary = guideDictionary;
+        this.extra = extra;
+        this.image = image;
+        this.url = url;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public GuideItemEntity(int id, String guideTitle, int guideDictionary, int extra, int image, String url) {
+        this.id = id;
+        this.guideTitle = guideTitle;
+        this.guideDictionary = guideDictionary;
+        this.extra = extra;
+        this.image = image;
+        this.url = url;
+    }
 
-	public int getExtra() {
-		return extra;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setExtra(int extra) {
-		this.extra = extra;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getGuideTitle() {
-		return guideTitle;
-	}
+    public int getExtra() {
+        return extra;
+    }
 
-	public void setGuideTitle(String guideTitle) {
-		this.guideTitle = guideTitle;
-	}
+    public void setExtra(int extra) {
+        this.extra = extra;
+    }
 
-	public int getGuideDictionary() {
-		return guideDictionary;
-	}
+    public String getGuideTitle() {
+        return guideTitle;
+    }
 
-	public void setGuideDictionary(int guideDictionary) {
-		this.guideDictionary = guideDictionary;
-	}
+    public void setGuideTitle(String guideTitle) {
+        this.guideTitle = guideTitle;
+    }
 
-	public int getImage() {
-		return image;
-	}
+    public int getGuideDictionary() {
+        return guideDictionary;
+    }
 
-	public void setImage(int image) {
-		this.image = image;
-	}
+    public void setGuideDictionary(int guideDictionary) {
+        this.guideDictionary = guideDictionary;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public int getImage() {
+        return image;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setImage(int image) {
+        this.image = image;
+    }
 
-	public String getPc_url() {
-		return pc_url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setPc_url(String pc_url) {
-		this.pc_url = pc_url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getPc_url() {
+        return pc_url;
+    }
+
+    public void setPc_url(String pc_url) {
+        this.pc_url = pc_url;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 }
